@@ -97,7 +97,7 @@
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="Aj0-cd-hX8">
                                 <rect key="frame" x="0.0" y="65" width="375" height="602"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="GG8-Jl-gxZ">
+                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="1" minimumInteritemSpacing="1" id="GG8-Jl-gxZ">
                                     <size key="itemSize" width="106" height="100"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                     <size key="footerReferenceSize" width="0.0" height="0.0"/>
@@ -149,6 +149,10 @@
                                         </connections>
                                     </collectionViewCell>
                                 </cells>
+                                <connections>
+                                    <outlet property="dataSource" destination="BYZ-38-t0r" id="oiz-Mt-4UE"/>
+                                    <outlet property="delegate" destination="BYZ-38-t0r" id="hgU-Pb-Afz"/>
+                                </connections>
                             </collectionView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -169,6 +173,7 @@
                         <outlet property="backBtn" destination="JU9-jg-DbI" id="cxE-WL-PlC"/>
                         <outlet property="checkBtn" destination="IJe-xQ-ESv" id="WWC-l1-1UY"/>
                         <outlet property="checkCount" destination="xtq-En-WSh" id="5uH-lM-kVk"/>
+                        <outlet property="collectionView" destination="Aj0-cd-hX8" id="263-w8-TVE"/>
                         <outlet property="galleryTypeArrow" destination="2Sf-S8-0EC" id="vQi-j2-ia1"/>
                         <outlet property="galleryTypeBtn" destination="RiI-6W-A7P" id="KDw-ex-CvG"/>
                     </connections>

@@ -24,10 +24,20 @@ extension UICollectionView {
 
 class CSPhotoGalleryCollectionViewCell: UICollectionViewCell {
     
-    @IBOutlet weak var imageView: UIImageView!
-    @IBOutlet weak var checkBtn: UIButton!
+    @IBOutlet private weak var imageView: UIImageView!
+    @IBOutlet private weak var checkBtn: UIButton!
     
-    @IBAction func checkBtnAction(_ sender: Any) {
+    @IBAction private func checkBtnAction(_ sender: Any) {
         
+    }
+    
+    var representedAssetIdentifier: String?
+    
+    func setPlaceHolderImage(image: UIImage?) {
+        setImage(image: image)
+    }
+    
+    func setImage(image: UIImage?) {
+        imageView.image = image
     }
 }
