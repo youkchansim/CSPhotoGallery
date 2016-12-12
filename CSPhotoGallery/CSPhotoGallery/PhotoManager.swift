@@ -10,8 +10,6 @@ import Foundation
 import Photos
 
 class PhotoManager: NSObject {
-    static var sharedInstance: PhotoManager = PhotoManager()
-    
     fileprivate var fetchResult: PHFetchResult<PHAsset>!
     fileprivate var assets: [PHAsset] = []
     
@@ -27,12 +25,11 @@ class PhotoManager: NSObject {
             selectedItemCount = selectedIndexPaths.count
         }
     }
-    
     dynamic private(set) var selectedItemCount: Int = 0
     
     public var CHECK_MAX_COUNT = 20
     
-    private override init() {
+    override init() {
         super.init()
         
         if fetchResult == nil {

@@ -6,4 +6,8 @@
 //  Copyright © 2016년 Youk Chansim. All rights reserved.
 //
 
-import Foundation
+import Photos
+
+protocol CSPhotoGalleryDelegate {
+    func getAssets(assets: [PHAsset])
+}
