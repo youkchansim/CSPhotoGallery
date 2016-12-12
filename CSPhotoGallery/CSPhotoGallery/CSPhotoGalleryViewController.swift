@@ -22,15 +22,12 @@ class CSPhotoGalleryViewController: UIViewController {
     @IBOutlet weak var collectionView: UICollectionView!
     
     @IBAction func galleryTypeBtnAction(_ sender: Any) {
-        if navigationController != nil {
-            let _ = navigationController?.popViewController(animated: true)
-        } else {
-            dismiss(animated: true, completion: nil)
-        }
+        back()
     }
     
     @IBAction func checkBtnAction(_ sender: Any) {
-        
+        delegate?.getAssets(assets: PhotoManager.sharedInstance.assets)
+        back()
     }
     
     var delegate: CSPhotoGalleryDelegate?
@@ -88,6 +85,14 @@ extension CSPhotoGalleryViewController {
     func setCheckCountLabel(count: Int) {
         DispatchQueue.main.async {
             self.checkCount.text = "\(count)"
+        }
+    }
+    
+    func back() {
+        if navigationController != nil {
+            let _ = navigationController?.popViewController(animated: true)
+        } else {
+            dismiss(animated: true, completion: nil)
         }
     }
 }

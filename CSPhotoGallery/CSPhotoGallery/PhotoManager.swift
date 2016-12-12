@@ -77,6 +77,15 @@ extension PhotoManager {
         return fetchResult.count
     }
     
+    var assets: [PHAsset] {
+        var tempList: [PHAsset] = []
+        selectedIndexPaths.forEach {
+            let asset = fetchResult.object(at: $0.item)
+            tempList.append(asset)
+        }
+        return tempList
+    }
+    
     //  Get localIdentifier
     func getLocalIdentifier(at indexPath: IndexPath) -> String {
         return getAsset(at: indexPath).localIdentifier
