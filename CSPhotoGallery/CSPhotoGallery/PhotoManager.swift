@@ -10,35 +10,55 @@ import Foundation
 import Photos
 
 class PhotoManager: NSObject {
-    fileprivate var fetchResult: PHFetchResult<PHAsset>!
-    fileprivate var assets: [PHAsset] = []
+    static var sharedInstance: PhotoManager = PhotoManager()
     
+    fileprivate var fetchResult: PHFetchResult<PHAsset>!
     fileprivate var assetCollection: PHAssetCollection?
     
     fileprivate let imageManager = PHCachingImageManager()
     fileprivate let imageRequestOptions = PHImageRequestOptions()
-    
-    fileprivate var previousPreheatRect = CGRect.zero
-    
     fileprivate var selectedIndexPaths: [IndexPath] = [] {
         didSet {
             selectedItemCount = selectedIndexPaths.count
         }
     }
     dynamic private(set) var selectedItemCount: Int = 0
-    
+
+    fileprivate let DEFAULT_CHECK_LIMIT_COUNT = 20
     public var CHECK_MAX_COUNT = 20
     
-    override init() {
+    override private init() {
         super.init()
         
-        if fetchResult == nil {
-            let allPhotosOptions = PHFetchOptions()
-            allPhotosOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
-            fetchResult = PHAsset.fetchAssets(with: .image, options: allPhotosOptions)
-        }
-        
-        //  Set image request option
+        initPhotoManager()
+        setImageRequestOptions()
+    }
+}
+
+//  MARK:- Init PhotoManager
+extension PhotoManager {
+    func initPhotoManager() {
+        initPHAssetCollection()
+        initFetchAssets()
+        initSelect()
+    }
+    
+    //  MARK:- TODO
+    private func initPHAssetCollection() {
+        assetCollection = nil
+    }
+    
+    private func initFetchAssets() {
+        let allPhotosOptions = PHFetchOptions()
+        allPhotosOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
+        fetchResult = PHAsset.fetchAssets(with: .image, options: allPhotosOptions)
+    }
+    
+    private func initSelect() {
+        selectedIndexPaths = []
+    }
+    
+    fileprivate func setImageRequestOptions() {
         imageRequestOptions.resizeMode = .exact
         imageRequestOptions.deliveryMode = .highQualityFormat
         imageRequestOptions.isSynchronous = false

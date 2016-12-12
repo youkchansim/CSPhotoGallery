@@ -37,7 +37,6 @@ class CSPhotoGalleryViewController: UIViewController {
     
     fileprivate var thumbnailSize: CGSize = CGSize.zero
     fileprivate var CSObservationContext = CSObservation()
-    fileprivate var photoManager = PhotoManager()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -48,7 +47,7 @@ class CSPhotoGalleryViewController: UIViewController {
     
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         if context == &CSObservationContext {
-            let count = photoManager.selectedItemCount
+            let count = PhotoManager.sharedInstance.selectedItemCount
             setCheckCountLabel(count: count)
         } else {
             super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
@@ -56,7 +55,7 @@ class CSPhotoGalleryViewController: UIViewController {
     }
     
     deinit {
-        photoManager.removeObserver(self, forKeyPath: "selectedItemCount")
+        PhotoManager.sharedInstance.removeObserver(self, forKeyPath: "selectedItemCount")
     }
 }
 
@@ -67,6 +66,11 @@ extension CSPhotoGalleryViewController {
     }
     
     private func setData() {
+        PhotoManager.sharedInstance.initPhotoManager()
+        setThumbnailSize()
+    }
+    
+    private func setThumbnailSize() {
         let scale = UIScreen.main.scale
         let cellSize = (collectionView.collectionViewLayout as! UICollectionViewFlowLayout).itemSize
         let size = min(cellSize.width, cellSize.height) * scale
@@ -78,7 +82,7 @@ extension CSPhotoGalleryViewController {
     }
     
     private func addObserver() {
-        photoManager.addObserver(self, forKeyPath: "selectedItemCount", options: .new, context: &CSObservationContext)
+        PhotoManager.sharedInstance.addObserver(self, forKeyPath: "selectedItemCount", options: .new, context: &CSObservationContext)
     }
     
     func setCheckCountLabel(count: Int) {
@@ -91,18 +95,18 @@ extension CSPhotoGalleryViewController {
 //  MARK:- UICollectionView DataSource
 extension CSPhotoGalleryViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return photoManager.assetsCount
+        return PhotoManager.sharedInstance.assetsCount
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(indexPath: indexPath) as CSPhotoGalleryCollectionViewCell
         cell.indexPath = indexPath
-        cell.representedAssetIdentifier = photoManager.getLocalIdentifier(at: indexPath)
+        cell.representedAssetIdentifier = PhotoManager.sharedInstance.getLocalIdentifier(at: indexPath)
         
         cell.setPlaceHolderImage(image: nil)
         cell.setButtonImage()
         
-        photoManager.setThumbnailImage(at: indexPath, thumbnailSize: thumbnailSize) { image in
+        PhotoManager.sharedInstance.setThumbnailImage(at: indexPath, thumbnailSize: thumbnailSize) { image in
             if cell.indexPath == indexPath {
                 cell.setImage(image: image)
             }
