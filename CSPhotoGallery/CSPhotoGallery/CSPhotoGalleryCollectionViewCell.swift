@@ -28,16 +28,31 @@ class CSPhotoGalleryCollectionViewCell: UICollectionViewCell {
     @IBOutlet private weak var checkBtn: UIButton!
     
     @IBAction private func checkBtnAction(_ sender: Any) {
-        
+        if indexPath != nil {
+            PhotoManager.sharedInstance.setSelectedIndexPath(indexPath: indexPath!)
+            setButtonImage()
+        }
     }
     
+    var indexPath: IndexPath?
+    
     var representedAssetIdentifier: String?
+    
+    func setButtonImage() {
+        DispatchQueue.main.async {
+            if PhotoManager.sharedInstance.isSelectedIndexPath(indexPath: self.indexPath!) {
+                self.checkBtn.backgroundColor = UIColor.blue
+            } else {
+                self.checkBtn.backgroundColor = UIColor.lightGray
+            }
+        }
+    }
     
     func setPlaceHolderImage(image: UIImage?) {
         setImage(image: image)
     }
     
     func setImage(image: UIImage?) {
-        imageView.image = image
+        self.imageView.image = image
     }
 }

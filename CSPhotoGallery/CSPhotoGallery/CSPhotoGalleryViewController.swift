@@ -7,7 +7,8 @@
 //
 
 import UIKit
-import Photos
+
+typealias CSObservation = UInt8
 
 class CSPhotoGalleryViewController: UIViewController {
 
@@ -21,13 +22,16 @@ class CSPhotoGalleryViewController: UIViewController {
     @IBOutlet weak var collectionView: UICollectionView!
     
     @IBAction func galleryTypeBtnAction(_ sender: Any) {
+        
     }
     
     @IBAction func checkBtnAction(_ sender: Any) {
+        
     }
     
-    var CHECK_MAX_COUNT = 20
-    var thumbnailSize: CGSize!
+    fileprivate var thumbnailSize: CGSize = CGSize.zero
+    
+    fileprivate var CSObservationContext = CSObservation()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,8 +40,17 @@ class CSPhotoGalleryViewController: UIViewController {
         setViewController()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        if context == &CSObservationContext {
+            let count = PhotoManager.sharedInstance.selectedItemCount
+            setCheckCountLabel(count: count)
+        } else {
+            super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
+        }
+    }
+    
+    deinit {
+        PhotoManager.sharedInstance.removeObserver(self, forKeyPath: "selectedItemCount")
     }
 }
 
@@ -50,28 +63,41 @@ extension CSPhotoGalleryViewController {
     private func setData() {
         let scale = UIScreen.main.scale
         let cellSize = (collectionView.collectionViewLayout as! UICollectionViewFlowLayout).itemSize
-        thumbnailSize = CGSize(width: cellSize.width * scale, height: cellSize.height * scale)
-        
+        let size = min(cellSize.width, cellSize.height) * scale
+        thumbnailSize = CGSize(width: size, height: size)
     }
     
     private func setView() {
-        
+        addObserver()
+    }
+    
+    private func addObserver() {
+        PhotoManager.sharedInstance.addObserver(self, forKeyPath: "selectedItemCount", options: .new, context: &CSObservationContext)
+    }
+    
+    func setCheckCountLabel(count: Int) {
+        DispatchQueue.main.async {
+            self.checkCount.text = "\(count)"
+        }
     }
 }
 
 //  MARK:- UICollectionView DataSource
 extension CSPhotoGalleryViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return PhotoManager.sharedInstance.getAssetCount()
+        return PhotoManager.sharedInstance.assetsCount
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(indexPath: indexPath) as CSPhotoGalleryCollectionViewCell
+        cell.indexPath = indexPath
         cell.representedAssetIdentifier = PhotoManager.sharedInstance.getLocalIdentifier(at: indexPath)
+        
         cell.setPlaceHolderImage(image: nil)
+        cell.setButtonImage()
         
         PhotoManager.sharedInstance.setThumbnailImage(at: indexPath, thumbnailSize: thumbnailSize) { image in
-            if cell.representedAssetIdentifier == PhotoManager.sharedInstance.getLocalIdentifier(at: indexPath) {
+            if cell.indexPath == indexPath {
                 cell.setImage(image: image)
             }
         }
@@ -87,7 +113,7 @@ extension CSPhotoGalleryViewController: UICollectionViewDelegate, UICollectionVi
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let size = (collectionView.bounds.width - 3) / 4
+        let size = (collectionView.bounds.width - 2) / 3
         return CGSize(width: size, height: size)
     }
 }
