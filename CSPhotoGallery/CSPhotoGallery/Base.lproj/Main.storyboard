@@ -208,6 +208,10 @@
         <scene sceneID="vNt-pG-WFg">
             <objects>
                 <viewController storyboardIdentifier="CSPhotoGalleryAssetCollectionViewController" title="CSPhotoGalleryAssetCollectionViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="EwA-bM-vMq" customClass="CSPhotoGalleryAssetCollectionViewController" customModule="CSPhotoGallery" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="6RL-em-9yj"/>
+                        <viewControllerLayoutGuide type="bottom" id="VLY-3P-o76"/>
+                    </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="AQy-lR-rb0">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -215,12 +219,13 @@
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="82" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="lDB-de-PCT">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="CSPhotoGalleryAssetCollectionViewCell" selectionStyle="default" indentationWidth="10" reuseIdentifier="CSPhotoGalleryAssetCollectionViewCell" rowHeight="80" id="uYe-Fl-CdN" customClass="CSPhotoGalleryAssetCollectionViewCell" customModule="CSPhotoGallery" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="375" height="80"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="uYe-Fl-CdN" id="Fp6-oY-apU">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="79"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="80"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="l52-ui-Sai">

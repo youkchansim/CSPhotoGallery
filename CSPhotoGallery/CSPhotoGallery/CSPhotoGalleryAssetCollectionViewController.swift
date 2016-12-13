@@ -14,7 +14,11 @@ class CSPhotoGalleryAssetCollectionViewController: UIViewController {
         return storyBoard.instantiateViewController(withIdentifier: identifier) as! CSPhotoGalleryAssetCollectionViewController
     }
     
-    @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var tableView: UITableView! {
+        didSet {
+            tableView.tableFooterView = UIView()
+        }
+    }
     
     var isHidden: Bool = true {
         didSet {

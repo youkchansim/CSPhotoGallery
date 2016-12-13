@@ -22,12 +22,26 @@ enum SegueIdentifier: String {
     case showCollection
 }
 
+enum CSPhotoImageType {
+    case image
+    case video
+    
+    var type: PHAssetMediaType {
+        switch self {
+        case .image:
+            return .image
+        case .video:
+            return .video
+        }
+    }
+}
+
 class PhotoManager: NSObject {
     static var sharedInstance: PhotoManager = PhotoManager()
     
     fileprivate var allPhotos: PHFetchResult<PHAsset>!
-    fileprivate var smartAlbums: PHFetchResult<PHAssetCollection>!
-    fileprivate var userCollections: PHFetchResult<PHCollection>!
+    fileprivate var smartAlbums: [PHAssetCollection] = []
+    fileprivate var userCollections: [PHCollection] = []
     
     fileprivate let imageManager = PHCachingImageManager()
     fileprivate let imageRequestOptions = PHImageRequestOptions()
@@ -38,6 +52,7 @@ class PhotoManager: NSObject {
     }
     dynamic private(set) var selectedItemCount: Int = 0
 
+    public var mediaType: CSPhotoImageType = .image
     public var CHECK_MAX_COUNT = 20
     
     override private init() {
@@ -59,16 +74,26 @@ extension PhotoManager {
     
     //  MARK:- TODO
     private func initPHAssetCollection() {
-        smartAlbums = PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .albumRegular, options: nil)
+        smartAlbums = []
+        PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .any, options: nil).enumerateObjects({ collection, _, _ in
+            if self.getPHAssetCollectionCount(collection: collection) > 0 {
+                self.smartAlbums.append(collection)
+            }
+        })
         
-        userCollections = PHCollectionList.fetchTopLevelUserCollections(with: nil)
+        userCollections = []
+        PHCollectionList.fetchTopLevelUserCollections(with: nil).enumerateObjects({ collection, _, _ in
+            if self.getPHAssetCollectionCount(collection: collection as! PHAssetCollection) > 0 {
+                self.userCollections.append(collection)
+            }
+        })
     }
     
     private func initFetchAssets() {
         let allPhotosOptions = PHFetchOptions()
         allPhotosOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
         
-        allPhotos = PHAsset.fetchAssets(with: .image, options: allPhotosOptions)
+        allPhotos = PHAsset.fetchAssets(with: mediaType.type, options: allPhotosOptions)
     }
     
     private func initSelect() {
@@ -85,7 +110,7 @@ extension PhotoManager {
 //  MARK:- PHAsset
 extension PhotoManager {
     //  Get PHAsset at IndexPath
-    private func getAsset(at indexPath: IndexPath) -> PHAsset {
+    private func getAllPhotosAsset(at indexPath: IndexPath) -> PHAsset {
         return allPhotos.object(at: indexPath.item)
     }
     
@@ -105,12 +130,12 @@ extension PhotoManager {
     
     //  Get localIdentifier
     func getLocalIdentifier(at indexPath: IndexPath) -> String {
-        return getAsset(at: indexPath).localIdentifier
+        return getAllPhotosAsset(at: indexPath).localIdentifier
     }
     
     //  Set ThumbnailImage
     func setThumbnailImage(at indexPath: IndexPath, thumbnailSize: CGSize, completeionHandler: ((UIImage)->())?) {
-        let asset = getAsset(at: indexPath)
+        let asset = getAllPhotosAsset(at: indexPath)
         imageManager.requestImage(for: asset, targetSize: thumbnailSize, contentMode: .aspectFill, options: imageRequestOptions) { image, _ in
             if let thumbnameImage = image {
                 let clopImage = PhotoUtil.cropImage(thumbnameImage)
@@ -139,14 +164,6 @@ extension PhotoManager {
     func getSelectedIndexPath(indexPath: IndexPath) -> [IndexPath] {
         return selectedIndexPaths
     }
-    
-    func getPHAssetCollectionCount(collection: PHAssetCollection) -> Int {
-        return PHAsset.fetchAssets(in: collection, options: nil).count
-    }
-    
-    func setFetchResult(collection: PHAssetCollection) {
-        let assets = PHAsset.fetchAssets(in: collection, options: nil)
-    }
 }
 
 //  MARK:- PHAssetCollection
@@ -156,7 +173,7 @@ extension PhotoManager {
     }
     
     func getSmartAlbumsAssetCollection(indexPath: IndexPath) -> PHAssetCollection {
-        return smartAlbums.object(at: indexPath.item)
+        return smartAlbums[indexPath.item]
     }
     
     var userCollectionsCount: Int {
@@ -164,7 +181,18 @@ extension PhotoManager {
     }
     
     func getUserCollection(indexPath: IndexPath) -> PHAssetCollection {
-        return userCollections.object(at: indexPath.item) as! PHAssetCollection
+        return userCollections[indexPath.item] as! PHAssetCollection
+    }
+    
+    func getPHAssetCollectionCount(collection: PHAssetCollection) -> Int {
+        return PHAsset.fetchAssets(in: collection, options: nil).countOfAssets(with: mediaType.type)
+    }
+    
+    func setFetchResult(collection: PHAssetCollection, indexPath: IndexPath)-> PHAsset {
+        let fetchOptions = PHFetchOptions()
+        fetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
+        fetchOptions.predicate = NSPredicate(format: "mediaType = %d", PHAssetMediaType.image.rawValue)
+        return PHAsset.fetchAssets(in: collection, options: fetchOptions).object(at: indexPath.item)
     }
 }
 
