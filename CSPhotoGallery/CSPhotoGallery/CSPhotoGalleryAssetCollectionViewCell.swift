@@ -10,7 +10,13 @@ import UIKit
 
 class CSPhotoGalleryAssetCollectionViewCell: UITableViewCell {
     
-    @IBOutlet weak var albumImageView: UIImageView!
+    var indexPath: IndexPath?
+    
+    @IBOutlet private weak var albumImageView: UIImageView!
     @IBOutlet weak var albumName: UILabel!
     @IBOutlet weak var albumAssetCount: UILabel!
+    
+    func setAlbumImage(image: UIImage?) {
+        albumImageView.image = image
+    }
 }

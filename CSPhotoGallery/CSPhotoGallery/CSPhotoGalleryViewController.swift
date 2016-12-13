@@ -7,14 +7,20 @@
 //
 
 import UIKit
+import Photos
 
 typealias CSObservation = UInt8
 
 class CSPhotoGalleryViewController: UIViewController {
-
+    
     @IBOutlet fileprivate weak var backBtn: UIButton!
-    @IBOutlet fileprivate weak var galleryTypeBtn: UIButton!
-    @IBOutlet fileprivate weak var galleryTypeArrow: UIImageView!
+    @IBOutlet fileprivate weak var collectionName: UILabel! {
+        didSet {
+            let gesture = UITapGestureRecognizer(target: self, action: #selector(collectionNameTap(_:)))
+            collectionName.addGestureRecognizer(gesture)
+            collectionName.isUserInteractionEnabled = true
+        }
+    }
     @IBOutlet fileprivate weak var checkCount: UILabel!
     @IBOutlet fileprivate weak var checkBtn: UIButton!
     
@@ -23,6 +29,7 @@ class CSPhotoGalleryViewController: UIViewController {
     fileprivate var assetCollectionViewController = CSPhotoGalleryAssetCollectionViewController.sharedInstance
     fileprivate var thumbnailSize: CGSize = CGSize.zero
     fileprivate var CSObservationContext = CSObservation()
+    fileprivate var CSCollectionObservationContext = CSObservation()
     
     var delegate: CSPhotoGalleryDelegate?
     
@@ -30,38 +37,50 @@ class CSPhotoGalleryViewController: UIViewController {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        setViewController()
+        setThumbnailSize()
+        
+        checkPhotoLibraryPermission()
     }
     
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         if context == &CSObservationContext {
             let count = PhotoManager.sharedInstance.selectedItemCount
             setCheckCountLabel(count: count)
+        } else if context == &CSCollectionObservationContext {
+            setTitle()
+            reloadCollectionView()
         } else {
             super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
         }
     }
     
     deinit {
+        PhotoManager.sharedInstance.remover(object: self)
         PhotoManager.sharedInstance.removeObserver(self, forKeyPath: "selectedItemCount")
+        PhotoManager.sharedInstance.removeObserver(self, forKeyPath: "currentCollection")
+    }
+}
+
+//  MARK:- Gesture
+extension CSPhotoGalleryViewController {
+    func collectionNameTap(_ sender: UITapGestureRecognizer) {
+        assetCollectionViewController.isHidden = !assetCollectionViewController.isHidden
     }
 }
 
 //  MARK:- Actions
 private extension CSPhotoGalleryViewController {
-    @IBAction func galleryTypeBtnAction(_ sender: Any) {
-        assetCollectionViewController.isHidden = !assetCollectionViewController.isHidden
-    }
-    
     @IBAction func backBtnAction(_ sender: Any) {
         delegate?.dismiss()
     }
     
     @IBAction func checkBtnAction(_ sender: Any) {
         delegate?.getAssets(assets: PhotoManager.sharedInstance.assets)
+        delegate?.dismiss()
     }
 }
 
+//  MARK:- Extension
 fileprivate extension CSPhotoGalleryViewController {
     func setViewController() {
         setData()
@@ -70,7 +89,6 @@ fileprivate extension CSPhotoGalleryViewController {
     
     func setData() {
         PhotoManager.sharedInstance.initPhotoManager()
-        setThumbnailSize()
     }
     
     func setThumbnailSize() {
@@ -83,6 +101,7 @@ fileprivate extension CSPhotoGalleryViewController {
     func setView() {
         addAssetCollectionView()
         addObserver()
+        setTitle()
     }
     
     func addAssetCollectionView() {
@@ -96,12 +115,42 @@ fileprivate extension CSPhotoGalleryViewController {
     }
     
     func addObserver() {
+        PhotoManager.sharedInstance.register(object: self)
         PhotoManager.sharedInstance.addObserver(self, forKeyPath: "selectedItemCount", options: .new, context: &CSObservationContext)
+        PhotoManager.sharedInstance.addObserver(self, forKeyPath: "currentCollection", options: .new, context: &CSCollectionObservationContext)
     }
     
     func setCheckCountLabel(count: Int) {
         DispatchQueue.main.async {
             self.checkCount.text = "\(count)"
+        }
+    }
+    
+    func setTitle() {
+        DispatchQueue.main.async {
+            let title = PhotoManager.sharedInstance.currentCollection?.localizedTitle
+            self.collectionName.text = title
+        }
+    }
+    
+    func checkPhotoLibraryPermission() {
+        PHPhotoLibrary.requestAuthorization() { status in
+            switch status {
+            case .authorized:
+                DispatchQueue.main.async {
+                    self.setViewController()
+                }
+            case .denied, .restricted:
+                break
+            case .notDetermined:
+                self.checkPhotoLibraryPermission()
+            }
+        }
+    }
+    
+    func reloadCollectionView() {
+        DispatchQueue.main.async {
+            self.collectionView.reloadData()
         }
     }
 }
@@ -121,7 +170,7 @@ extension CSPhotoGalleryViewController: UICollectionViewDataSource {
         cell.setButtonImage()
         
         PhotoManager.sharedInstance.setThumbnailImage(at: indexPath, thumbnailSize: thumbnailSize) { image in
-            if cell.indexPath == indexPath {
+            if cell.representedAssetIdentifier == PhotoManager.sharedInstance.getLocalIdentifier(at: indexPath) {
                 cell.setImage(image: image)
             }
         }
@@ -140,5 +189,42 @@ extension CSPhotoGalleryViewController: UICollectionViewDelegate, UICollectionVi
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let size = (collectionView.bounds.width - 2) / 3
         return CGSize(width: size, height: size)
+    }
+}
+
+extension CSPhotoGalleryViewController: PHPhotoLibraryChangeObserver {
+    func photoLibraryDidChange(_ changeInstance: PHChange) {
+        guard let changes = changeInstance.changeDetails(for: PhotoManager.sharedInstance.getCurrentAsset()) else {
+            return
+        }
+        
+        DispatchQueue.main.sync {
+            // Hang on to the new fetch result.
+            PhotoManager.sharedInstance.reloadCurrentAsset()
+            if changes.hasIncrementalChanges {
+                // If we have incremental diffs, animate them in the collection view.
+                guard let collectionView = self.collectionView else { fatalError() }
+                collectionView.performBatchUpdates({
+                    // For indexes to make sense, updates must be in this order:
+                    // delete, insert, reload, move
+                    if let removed = changes.removedIndexes, removed.count > 0 {
+                        collectionView.deleteItems(at: removed.map({ IndexPath(item: $0, section: 0) }))
+                    }
+                    if let inserted = changes.insertedIndexes, inserted.count > 0 {
+                        collectionView.insertItems(at: inserted.map({ IndexPath(item: $0, section: 0) }))
+                    }
+                    if let changed = changes.changedIndexes, changed.count > 0 {
+                        collectionView.reloadItems(at: changed.map({ IndexPath(item: $0, section: 0) }))
+                    }
+                    changes.enumerateMoves { fromIndex, toIndex in
+                        collectionView.moveItem(at: IndexPath(item: fromIndex, section: 0),
+                                                to: IndexPath(item: toIndex, section: 0))
+                    }
+                })
+            } else {
+                // Reload the collection view if incremental diffs are not available.
+                collectionView!.reloadData()
+            }
+        }
     }
 }

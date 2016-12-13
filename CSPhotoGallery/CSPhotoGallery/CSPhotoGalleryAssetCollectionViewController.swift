@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Photos
 
 class CSPhotoGalleryAssetCollectionViewController: UIViewController {
     static var sharedInstance: CSPhotoGalleryAssetCollectionViewController {
@@ -32,6 +33,27 @@ class CSPhotoGalleryAssetCollectionViewController: UIViewController {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        setViewController()
+    }
+    
+    deinit {
+        PhotoManager.sharedInstance.remover(object: self)
+        NSLog("Deinit \(self)")
+    }
+}
+
+extension CSPhotoGalleryAssetCollectionViewController {
+    fileprivate func setViewController() {
+        setData()
+        setView()
+    }
+    
+    private func setView() {
+        
+    }
+    
+    private func setData() {
+        PhotoManager.sharedInstance.register(object: self)
     }
 }
 
@@ -46,7 +68,7 @@ extension CSPhotoGalleryAssetCollectionViewController {
     }
     
     private func showView(height: CGFloat) {
-        UIView.animate(withDuration: 0.5) {
+        UIView.animate(withDuration: 0.2) {
             self.view.frame.size.height = height
             self.view.layoutIfNeeded()
         }
@@ -61,7 +83,6 @@ extension CSPhotoGalleryAssetCollectionViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch Section(rawValue: section)! {
-        case .allPhotos: return 1
         case .smartAlbums: return PhotoManager.sharedInstance.smartAlbumsCount
         case .userCollections: return PhotoManager.sharedInstance.userCollectionsCount
         }
@@ -70,21 +91,42 @@ extension CSPhotoGalleryAssetCollectionViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell() as CSPhotoGalleryAssetCollectionViewCell
         switch Section(rawValue: indexPath.section)! {
-        case .allPhotos:
-            cell.albumName.text = "모든 사진"
-            cell.albumAssetCount.text = "\(PhotoManager.sharedInstance.assetsCount)"
-            return cell
-            
         case .smartAlbums:
-            let collection = PhotoManager.sharedInstance.getSmartAlbumsAssetCollection(indexPath: indexPath)
+            let collection = PhotoManager.sharedInstance.getSmartAlbumsAssetCollection(index: indexPath.item)
+            
+            cell.setAlbumImage(image: nil)
+            cell.indexPath = indexPath
             cell.albumName.text = collection.localizedTitle
             cell.albumAssetCount.text = "\(PhotoManager.sharedInstance.getPHAssetCollectionCount(collection: collection))"
+            
+            let asset = PhotoManager.sharedInstance.getAssetsInPHAssetCollection(collection: collection).object(at: 0)
+            let size = cell.bounds.width * 5
+            
+            PhotoManager.sharedInstance.assetToImage(asset: asset, imageSize: CGSize(width: size, height: size)) { image in
+                if cell.indexPath == indexPath {
+                    cell.setAlbumImage(image: image)
+                }
+            }
+            
             return cell
             
         case .userCollections:
-            let collection = PhotoManager.sharedInstance.getUserCollection(indexPath: indexPath)
+            let collection = PhotoManager.sharedInstance.getUserCollection(index: indexPath.item)
+            
+            cell.setAlbumImage(image: nil)
+            cell.indexPath = indexPath
             cell.albumName.text = collection.localizedTitle
             cell.albumAssetCount.text = "\(PhotoManager.sharedInstance.getPHAssetCollectionCount(collection: collection))"
+            
+            let asset = PhotoManager.sharedInstance.getAssetsInPHAssetCollection(collection: collection).object(at: 0)
+            let size = cell.bounds.width * 5
+            
+            PhotoManager.sharedInstance.assetToImage(asset: asset, imageSize: CGSize(width: size, height: size)) { image in
+                if cell.indexPath == indexPath {
+                    cell.setAlbumImage(image: image)
+                }
+            }
+            
             return cell
         }
     }
@@ -94,6 +136,25 @@ extension CSPhotoGalleryAssetCollectionViewController: UITableViewDataSource {
 extension CSPhotoGalleryAssetCollectionViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false)
+        switch Section(rawValue: indexPath.section)! {
+        case .smartAlbums:
+            let collection = PhotoManager.sharedInstance.getSmartAlbumsAssetCollection(index: indexPath.item)
+            PhotoManager.sharedInstance.currentCollection = collection
+        case .userCollections:
+            let collection = PhotoManager.sharedInstance.getUserCollection(index: indexPath.item)
+            PhotoManager.sharedInstance.currentCollection = collection
+        }
         
+        isHidden = !isHidden
+    }
+}
+
+extension CSPhotoGalleryAssetCollectionViewController: PHPhotoLibraryChangeObserver {
+    func photoLibraryDidChange(_ changeInstance: PHChange) {
+        DispatchQueue.main.sync {
+            PhotoManager.sharedInstance.initSmartAlbumCollection()
+            PhotoManager.sharedInstance.initUserCollection()
+            self.tableView.reloadData()
+        }
     }
 }

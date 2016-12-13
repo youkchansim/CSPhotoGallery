@@ -15,21 +15,20 @@ class CSPhotoGalleryCollectionViewCell: UICollectionViewCell {
     
     @IBAction private func checkBtnAction(_ sender: Any) {
         if indexPath != nil {
-            PhotoManager.sharedInstance.setSelectedIndexPath(indexPath: indexPath!)
+            PhotoManager.sharedInstance.setSelectedIndexPath(identifier: representedAssetIdentifier!)
             setButtonImage()
         }
     }
     
     var indexPath: IndexPath?
-    
     var representedAssetIdentifier: String?
     
     func setButtonImage() {
         DispatchQueue.main.async {
-            if PhotoManager.sharedInstance.isSelectedIndexPath(indexPath: self.indexPath!) {
-                self.checkBtn.backgroundColor = UIColor.blue
+            if PhotoManager.sharedInstance.isSelectedIndexPath(identifier: self.representedAssetIdentifier!) {
+                self.checkBtn.setImage(UIImage(named: "check_select"), for: .normal)
             } else {
-                self.checkBtn.backgroundColor = UIColor.lightGray
+                self.checkBtn.setImage(UIImage(named: "check_default"), for: .normal)
             }
         }
     }
