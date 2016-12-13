@@ -9,11 +9,25 @@
 import Foundation
 import Photos
 
+enum Section: Int {
+    case allPhotos = 0
+    case smartAlbums
+    case userCollections
+    
+    static let count = 3
+}
+
+enum SegueIdentifier: String {
+    case showAllPhotos
+    case showCollection
+}
+
 class PhotoManager: NSObject {
     static var sharedInstance: PhotoManager = PhotoManager()
     
-    fileprivate var fetchResult: PHFetchResult<PHAsset>!
-    fileprivate var assetCollection: PHAssetCollection?
+    fileprivate var allPhotos: PHFetchResult<PHAsset>!
+    fileprivate var smartAlbums: PHFetchResult<PHAssetCollection>!
+    fileprivate var userCollections: PHFetchResult<PHCollection>!
     
     fileprivate let imageManager = PHCachingImageManager()
     fileprivate let imageRequestOptions = PHImageRequestOptions()
@@ -24,14 +38,12 @@ class PhotoManager: NSObject {
     }
     dynamic private(set) var selectedItemCount: Int = 0
 
-    fileprivate let DEFAULT_CHECK_LIMIT_COUNT = 20
     public var CHECK_MAX_COUNT = 20
     
     override private init() {
         super.init()
         
         initPhotoManager()
-        setImageRequestOptions()
     }
 }
 
@@ -41,46 +53,51 @@ extension PhotoManager {
         initPHAssetCollection()
         initFetchAssets()
         initSelect()
+        
+        setImageRequestOptions()
     }
     
     //  MARK:- TODO
     private func initPHAssetCollection() {
-        assetCollection = nil
+        smartAlbums = PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .albumRegular, options: nil)
+        
+        userCollections = PHCollectionList.fetchTopLevelUserCollections(with: nil)
     }
     
     private func initFetchAssets() {
         let allPhotosOptions = PHFetchOptions()
         allPhotosOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
-        fetchResult = PHAsset.fetchAssets(with: .image, options: allPhotosOptions)
+        
+        allPhotos = PHAsset.fetchAssets(with: .image, options: allPhotosOptions)
     }
     
     private func initSelect() {
         selectedIndexPaths = []
     }
     
-    fileprivate func setImageRequestOptions() {
+    private func setImageRequestOptions() {
         imageRequestOptions.resizeMode = .exact
         imageRequestOptions.deliveryMode = .highQualityFormat
         imageRequestOptions.isSynchronous = false
     }
 }
 
-//  MARK:- PhotoManager Extension
+//  MARK:- PHAsset
 extension PhotoManager {
     //  Get PHAsset at IndexPath
     private func getAsset(at indexPath: IndexPath) -> PHAsset {
-        return fetchResult.object(at: indexPath.item)
+        return allPhotos.object(at: indexPath.item)
     }
     
     //  Get PHAsset Count
     var assetsCount: Int {
-        return fetchResult.count
+        return allPhotos.count
     }
     
     var assets: [PHAsset] {
         var tempList: [PHAsset] = []
         selectedIndexPaths.forEach {
-            let asset = fetchResult.object(at: $0.item)
+            let asset = allPhotos.object(at: $0.item)
             tempList.append(asset)
         }
         return tempList
@@ -121,6 +138,33 @@ extension PhotoManager {
     //  Get selected Indexpath
     func getSelectedIndexPath(indexPath: IndexPath) -> [IndexPath] {
         return selectedIndexPaths
+    }
+    
+    func getPHAssetCollectionCount(collection: PHAssetCollection) -> Int {
+        return PHAsset.fetchAssets(in: collection, options: nil).count
+    }
+    
+    func setFetchResult(collection: PHAssetCollection) {
+        let assets = PHAsset.fetchAssets(in: collection, options: nil)
+    }
+}
+
+//  MARK:- PHAssetCollection
+extension PhotoManager {
+    var smartAlbumsCount: Int {
+        return smartAlbums.count
+    }
+    
+    func getSmartAlbumsAssetCollection(indexPath: IndexPath) -> PHAssetCollection {
+        return smartAlbums.object(at: indexPath.item)
+    }
+    
+    var userCollectionsCount: Int {
+        return userCollections.count
+    }
+    
+    func getUserCollection(indexPath: IndexPath) -> PHAssetCollection {
+        return userCollections.object(at: indexPath.item) as! PHAssetCollection
     }
 }
 

@@ -8,20 +8,6 @@
 
 import UIKit
 
-protocol Reusable {}
-extension Reusable {
-    static var reuseIdentifier: String {
-        return "\(self)"
-    }
-}
-extension UICollectionViewCell: Reusable {}
-
-extension UICollectionView {
-    func dequeueReusableCell<T: Reusable>(indexPath: IndexPath) -> T {
-        return self.dequeueReusableCell(withReuseIdentifier: T.reuseIdentifier, for: indexPath) as! T
-    }
-}
-
 class CSPhotoGalleryCollectionViewCell: UICollectionViewCell {
     
     @IBOutlet private weak var imageView: UIImageView!

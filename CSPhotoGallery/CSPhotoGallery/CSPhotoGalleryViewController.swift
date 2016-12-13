@@ -12,28 +12,19 @@ typealias CSObservation = UInt8
 
 class CSPhotoGalleryViewController: UIViewController {
 
-    @IBOutlet weak var backBtn: UIButton!
-    @IBOutlet weak var galleryTypeBtn: UIButton!
-    @IBOutlet weak var galleryTypeArrow: UIImageView!
+    @IBOutlet fileprivate weak var backBtn: UIButton!
+    @IBOutlet fileprivate weak var galleryTypeBtn: UIButton!
+    @IBOutlet fileprivate weak var galleryTypeArrow: UIImageView!
+    @IBOutlet fileprivate weak var checkCount: UILabel!
+    @IBOutlet fileprivate weak var checkBtn: UIButton!
     
-    @IBOutlet weak var checkCount: UILabel!
-    @IBOutlet weak var checkBtn: UIButton!
+    @IBOutlet fileprivate weak var collectionView: UICollectionView!
     
-    @IBOutlet weak var collectionView: UICollectionView!
-    
-    @IBAction func galleryTypeBtnAction(_ sender: Any) {
-        back()
-    }
-    
-    @IBAction func checkBtnAction(_ sender: Any) {
-        delegate?.getAssets(assets: PhotoManager.sharedInstance.assets)
-        back()
-    }
-    
-    var delegate: CSPhotoGalleryDelegate?
-    
+    fileprivate var assetCollectionViewController = CSPhotoGalleryAssetCollectionViewController.sharedInstance
     fileprivate var thumbnailSize: CGSize = CGSize.zero
     fileprivate var CSObservationContext = CSObservation()
+    
+    var delegate: CSPhotoGalleryDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -56,43 +47,61 @@ class CSPhotoGalleryViewController: UIViewController {
     }
 }
 
-extension CSPhotoGalleryViewController {
-    fileprivate func setViewController() {
+//  MARK:- Actions
+private extension CSPhotoGalleryViewController {
+    @IBAction func galleryTypeBtnAction(_ sender: Any) {
+        assetCollectionViewController.isHidden = !assetCollectionViewController.isHidden
+    }
+    
+    @IBAction func backBtnAction(_ sender: Any) {
+        delegate?.dismiss()
+    }
+    
+    @IBAction func checkBtnAction(_ sender: Any) {
+        delegate?.getAssets(assets: PhotoManager.sharedInstance.assets)
+    }
+}
+
+fileprivate extension CSPhotoGalleryViewController {
+    func setViewController() {
         setData()
         setView()
     }
     
-    private func setData() {
+    func setData() {
         PhotoManager.sharedInstance.initPhotoManager()
         setThumbnailSize()
     }
     
-    private func setThumbnailSize() {
+    func setThumbnailSize() {
         let scale = UIScreen.main.scale
         let cellSize = (collectionView.collectionViewLayout as! UICollectionViewFlowLayout).itemSize
         let size = min(cellSize.width, cellSize.height) * scale
         thumbnailSize = CGSize(width: size, height: size)
     }
     
-    private func setView() {
+    func setView() {
+        addAssetCollectionView()
         addObserver()
     }
     
-    private func addObserver() {
+    func addAssetCollectionView() {
+        assetCollectionViewController.view.frame = collectionView.frame
+        assetCollectionViewController.viewHeight = collectionView.bounds.height
+        assetCollectionViewController.view.frame.size.height = 0
+        
+        addChildViewController(assetCollectionViewController)
+        view.addSubview(assetCollectionViewController.view)
+        assetCollectionViewController.didMove(toParentViewController: self)
+    }
+    
+    func addObserver() {
         PhotoManager.sharedInstance.addObserver(self, forKeyPath: "selectedItemCount", options: .new, context: &CSObservationContext)
     }
     
     func setCheckCountLabel(count: Int) {
         DispatchQueue.main.async {
             self.checkCount.text = "\(count)"
-        }
-    }
-    
-    func back() {
-        if navigationController != nil {
-            let _ = navigationController?.popViewController(animated: true)
-        } else {
-            dismiss(animated: true, completion: nil)
         }
     }
 }
@@ -124,6 +133,7 @@ extension CSPhotoGalleryViewController: UICollectionViewDataSource {
 //  MARK:- UICollectionView Delegate
 extension CSPhotoGalleryViewController: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        //  Present photo viewer
         
     }
     
