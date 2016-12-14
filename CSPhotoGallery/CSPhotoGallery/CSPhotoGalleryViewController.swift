@@ -11,7 +11,7 @@ import Photos
 
 typealias CSObservation = UInt8
 
-class CSPhotoGalleryViewController: UIViewController {
+public class CSPhotoGalleryViewController: UIViewController {
     
     @IBOutlet fileprivate weak var backBtn: UIButton!
     @IBOutlet fileprivate weak var collectionName: UILabel! {
@@ -32,17 +32,18 @@ class CSPhotoGalleryViewController: UIViewController {
     fileprivate var CSCollectionObservationContext = CSObservation()
     
     var delegate: CSPhotoGalleryDelegate?
+    var mediaType: CSPhotoImageType = .image
+    var CHECK_MAX_COUNT = 20
     
-    override func viewDidLoad() {
+    override public func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
         setThumbnailSize()
-        
         checkPhotoLibraryPermission()
     }
     
-    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+    override public func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         if context == &CSObservationContext {
             let count = PhotoManager.sharedInstance.selectedItemCount
             setCheckCountLabel(count: count)
@@ -88,6 +89,8 @@ fileprivate extension CSPhotoGalleryViewController {
     }
     
     func setData() {
+        PhotoManager.sharedInstance.CHECK_MAX_COUNT = CHECK_MAX_COUNT
+        PhotoManager.sharedInstance.mediaType = mediaType
         PhotoManager.sharedInstance.initPhotoManager()
     }
     
@@ -157,11 +160,11 @@ fileprivate extension CSPhotoGalleryViewController {
 
 //  MARK:- UICollectionView DataSource
 extension CSPhotoGalleryViewController: UICollectionViewDataSource {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return PhotoManager.sharedInstance.assetsCount
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(indexPath: indexPath) as CSPhotoGalleryCollectionViewCell
         cell.indexPath = indexPath
         cell.representedAssetIdentifier = PhotoManager.sharedInstance.getLocalIdentifier(at: indexPath)
@@ -181,19 +184,22 @@ extension CSPhotoGalleryViewController: UICollectionViewDataSource {
 
 //  MARK:- UICollectionView Delegate
 extension CSPhotoGalleryViewController: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         //  Present photo viewer
-        
+        let vc = CSPhotoGalleryDetailViewController.sharedInstance
+        vc.delegate = delegate
+        vc.currentIndexPath = indexPath
+        present(vc, animated: true, completion: nil)
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+    public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let size = (collectionView.bounds.width - 2) / 3
         return CGSize(width: size, height: size)
     }
 }
 
 extension CSPhotoGalleryViewController: PHPhotoLibraryChangeObserver {
-    func photoLibraryDidChange(_ changeInstance: PHChange) {
+    public func photoLibraryDidChange(_ changeInstance: PHChange) {
         guard let changes = changeInstance.changeDetails(for: PhotoManager.sharedInstance.getCurrentAsset()) else {
             return
         }

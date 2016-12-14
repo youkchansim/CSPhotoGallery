@@ -52,8 +52,8 @@ class PhotoManager: NSObject {
     }
     fileprivate var currentFetchResult: PHFetchResult<PHAsset>!
 
-    public var mediaType: CSPhotoImageType = .image
-    public var CHECK_MAX_COUNT = 20
+    var mediaType: CSPhotoImageType = .image
+    var CHECK_MAX_COUNT = 20
     
     override private init() {
         super.init()
@@ -69,12 +69,10 @@ extension PhotoManager {
         initImageRequestOptions()
     }
     
-    //  MARK:- TODO
     private func initPHAssetCollection() {
         initSmartAlbumCollection()
-        currentCollection = smartAlbums.first
-        
         initUserCollection()
+        currentCollection = smartAlbums.first
     }
     
     func initSmartAlbumCollection() {
@@ -111,7 +109,7 @@ extension PhotoManager {
 //  MARK:- PHAsset
 extension PhotoManager {
     //  Get PHAsset at IndexPath
-    private func getCurrentCollectionAsset(at indexPath: IndexPath) -> PHAsset {
+    func getCurrentCollectionAsset(at indexPath: IndexPath) -> PHAsset {
         return currentFetchResult.object(at: indexPath.item)
     }
     

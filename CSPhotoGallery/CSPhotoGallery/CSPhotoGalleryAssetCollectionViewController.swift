@@ -90,45 +90,30 @@ extension CSPhotoGalleryAssetCollectionViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell() as CSPhotoGalleryAssetCollectionViewCell
+        var collection: PHAssetCollection?
+        
         switch Section(rawValue: indexPath.section)! {
         case .smartAlbums:
-            let collection = PhotoManager.sharedInstance.getSmartAlbumsAssetCollection(index: indexPath.item)
-            
-            cell.setAlbumImage(image: nil)
-            cell.indexPath = indexPath
-            cell.albumName.text = collection.localizedTitle
-            cell.albumAssetCount.text = "\(PhotoManager.sharedInstance.getPHAssetCollectionCount(collection: collection))"
-            
-            let asset = PhotoManager.sharedInstance.getAssetsInPHAssetCollection(collection: collection).object(at: 0)
-            let size = cell.bounds.width * 5
-            
-            PhotoManager.sharedInstance.assetToImage(asset: asset, imageSize: CGSize(width: size, height: size)) { image in
-                if cell.indexPath == indexPath {
-                    cell.setAlbumImage(image: image)
-                }
-            }
-            
-            return cell
-            
+            collection = PhotoManager.sharedInstance.getSmartAlbumsAssetCollection(index: indexPath.item)
         case .userCollections:
-            let collection = PhotoManager.sharedInstance.getUserCollection(index: indexPath.item)
-            
-            cell.setAlbumImage(image: nil)
-            cell.indexPath = indexPath
-            cell.albumName.text = collection.localizedTitle
-            cell.albumAssetCount.text = "\(PhotoManager.sharedInstance.getPHAssetCollectionCount(collection: collection))"
-            
-            let asset = PhotoManager.sharedInstance.getAssetsInPHAssetCollection(collection: collection).object(at: 0)
-            let size = cell.bounds.width * 5
-            
-            PhotoManager.sharedInstance.assetToImage(asset: asset, imageSize: CGSize(width: size, height: size)) { image in
-                if cell.indexPath == indexPath {
-                    cell.setAlbumImage(image: image)
-                }
-            }
-            
-            return cell
+            collection = PhotoManager.sharedInstance.getUserCollection(index: indexPath.item)
         }
+        
+        cell.setAlbumImage(image: nil)
+        cell.indexPath = indexPath
+        cell.albumName.text = collection!.localizedTitle
+        cell.albumAssetCount.text = "\(PhotoManager.sharedInstance.getPHAssetCollectionCount(collection: collection!))"
+        
+        let asset = PhotoManager.sharedInstance.getAssetsInPHAssetCollection(collection: collection!).object(at: 0)
+        let size = cell.bounds.width * 5
+        
+        PhotoManager.sharedInstance.assetToImage(asset: asset, imageSize: CGSize(width: size, height: size)) { image in
+            if cell.indexPath == indexPath {
+                cell.setAlbumImage(image: image)
+            }
+        }
+        
+        return cell
     }
 }
 
@@ -136,15 +121,16 @@ extension CSPhotoGalleryAssetCollectionViewController: UITableViewDataSource {
 extension CSPhotoGalleryAssetCollectionViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false)
+        var collection: PHAssetCollection?
+        
         switch Section(rawValue: indexPath.section)! {
         case .smartAlbums:
-            let collection = PhotoManager.sharedInstance.getSmartAlbumsAssetCollection(index: indexPath.item)
-            PhotoManager.sharedInstance.currentCollection = collection
+            collection = PhotoManager.sharedInstance.getSmartAlbumsAssetCollection(index: indexPath.item)
         case .userCollections:
-            let collection = PhotoManager.sharedInstance.getUserCollection(index: indexPath.item)
-            PhotoManager.sharedInstance.currentCollection = collection
+            collection = PhotoManager.sharedInstance.getUserCollection(index: indexPath.item)
         }
         
+        PhotoManager.sharedInstance.currentCollection = collection
         isHidden = !isHidden
     }
 }
