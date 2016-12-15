@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="15G1004" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16C67" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="YzM-Z8-PbG">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -160,6 +160,7 @@
                             <constraint firstItem="Aj0-cd-hX8" firstAttribute="top" secondItem="IKN-qu-6qD" secondAttribute="bottom" id="zLI-RJ-qrS"/>
                         </constraints>
                     </view>
+                    <navigationItem key="navigationItem" id="rWf-wM-eIZ"/>
                     <connections>
                         <outlet property="backBtn" destination="JU9-jg-DbI" id="cxE-WL-PlC"/>
                         <outlet property="checkBtn" destination="IJe-xQ-ESv" id="WWC-l1-1UY"/>
@@ -170,7 +171,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="141.59999999999999" y="136.28185907046478"/>
+            <point key="canvasLocation" x="1080.8" y="136.28185907046478"/>
         </scene>
         <!--CSPhotoGalleryDetailViewController-->
         <scene sceneID="1Li-6w-dzT">
@@ -201,21 +202,27 @@
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="453"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="1000" verticalHuggingPriority="1000" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" translatesAutoresizingMaskIntoConstraints="NO" id="zfd-yd-KR8">
-                                                    <rect key="frame" x="0.0" y="0.0" width="375" height="453"/>
+                                                <imageView clipsSubviews="YES" contentMode="scaleAspectFit" horizontalHuggingPriority="1000" verticalHuggingPriority="1000" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" translatesAutoresizingMaskIntoConstraints="NO" id="zfd-yd-KR8">
+                                                    <rect key="frame" x="187.5" y="226.5" width="0.0" height="0.0"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" priority="900" id="YWJ-gs-Ej2"/>
+                                                        <constraint firstAttribute="width" priority="900" id="Zeg-oY-k6Q"/>
+                                                    </constraints>
                                                 </imageView>
                                             </subviews>
                                         </view>
                                         <constraints>
-                                            <constraint firstAttribute="trailing" secondItem="zfd-yd-KR8" secondAttribute="trailing" id="AKm-cP-YBy"/>
+                                            <constraint firstItem="zfd-yd-KR8" firstAttribute="top" relation="greaterThanOrEqual" secondItem="hfc-SG-QW5" secondAttribute="top" id="6Ca-vp-Asa"/>
+                                            <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="zfd-yd-KR8" secondAttribute="trailing" id="7Uo-mn-W29"/>
                                             <constraint firstItem="zfd-yd-KR8" firstAttribute="centerY" secondItem="hfc-SG-QW5" secondAttribute="centerY" id="HGu-bX-Qye"/>
-                                            <constraint firstAttribute="bottom" secondItem="zfd-yd-KR8" secondAttribute="bottom" id="Kqj-4m-273"/>
-                                            <constraint firstItem="zfd-yd-KR8" firstAttribute="top" secondItem="hfc-SG-QW5" secondAttribute="top" id="QFY-V1-A9H"/>
-                                            <constraint firstItem="zfd-yd-KR8" firstAttribute="leading" secondItem="hfc-SG-QW5" secondAttribute="leading" id="bXH-pT-hpg"/>
+                                            <constraint firstItem="zfd-yd-KR8" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="hfc-SG-QW5" secondAttribute="leading" id="LAr-Ds-jTj"/>
+                                            <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="zfd-yd-KR8" secondAttribute="bottom" id="PXI-gT-nRJ"/>
                                             <constraint firstItem="zfd-yd-KR8" firstAttribute="centerX" secondItem="hfc-SG-QW5" secondAttribute="centerX" id="zgg-xj-Fie"/>
                                         </constraints>
                                         <connections>
                                             <outlet property="imageView" destination="zfd-yd-KR8" id="xTv-pR-Tem"/>
+                                            <outlet property="imageViewHeightConstraint" destination="YWJ-gs-Ej2" id="83a-EN-WH0"/>
+                                            <outlet property="imageViewWidthConstraint" destination="Zeg-oY-k6Q" id="SEO-ws-ydX"/>
                                         </connections>
                                     </collectionViewCell>
                                 </cells>
@@ -316,7 +323,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ifX-UV-9Mj" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1592.8" y="135.38230884557723"/>
+            <point key="canvasLocation" x="2532" y="135.38230884557723"/>
         </scene>
         <!--CSPhotoGalleryAssetCollectionViewController-->
         <scene sceneID="vNt-pG-WFg">
@@ -399,7 +406,25 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="KAQ-wH-OHN" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="866" y="136"/>
+            <point key="canvasLocation" x="1804" y="135.38230884557723"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="Lhj-W1-ORa">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" navigationBarHidden="YES" id="YzM-Z8-PbG" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="yxr-3Y-8cd">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="ISp-M9-Tzs"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="rGb-wy-ocR" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="141.59999999999999" y="136.28185907046478"/>
         </scene>
     </scenes>
     <resources>

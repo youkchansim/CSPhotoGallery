@@ -10,7 +10,7 @@ import UIKit
 
 class CSPhotoGalleryCollectionViewCell: UICollectionViewCell {
     
-    @IBOutlet private weak var imageView: UIImageView!
+    @IBOutlet weak var imageView: UIImageView!
     @IBOutlet private weak var checkBtn: UIButton!
     
     @IBAction private func checkBtnAction(_ sender: Any) {

@@ -147,7 +147,7 @@ extension PhotoManager {
     func assetToClipImage(asset: PHAsset, imageSize: CGSize, completionHandler: ((UIImage)->())?) {
         imageManager.requestImage(for: asset, targetSize: imageSize, contentMode: .aspectFill, options: imageRequestOptions) { image, _ in
             if let thumbnameImage = image {
-                completionHandler?(thumbnameImage.cripRect)
+                completionHandler?(thumbnameImage.clipRect)
             }
         }
     }

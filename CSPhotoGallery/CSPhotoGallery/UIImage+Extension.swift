@@ -9,7 +9,7 @@
 import UIKit
 
 extension UIImage {
-    var cripRect: UIImage {
+    var clipRect: UIImage {
         // Create a copy of the image without the imageOrientation property so it is in its native orientation (landscape)
         let contextImage: UIImage = self
         

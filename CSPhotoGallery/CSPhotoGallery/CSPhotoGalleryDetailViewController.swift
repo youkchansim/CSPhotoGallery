@@ -14,30 +14,39 @@ class CSPhotoGalleryDetailViewController: UIViewController {
         return storyBoard.instantiateViewController(withIdentifier: identifier) as! CSPhotoGalleryDetailViewController
     }
 
-    @IBOutlet weak var currentIndexLabel: UILabel!
-    @IBOutlet weak var currentCollectionCountLabel: UILabel! {
+    @IBOutlet weak var currentIndexLabel: UILabel? {
         didSet {
-            currentCollectionCountLabel.text = "\(PhotoManager.sharedInstance.assetsCount)"
+            updateCurrentIndexLabel()
         }
     }
     
-    @IBOutlet weak var checkCountLabel: UILabel! {
+    @IBOutlet weak var currentCollectionCountLabel: UILabel? {
         didSet {
-            checkCountLabel.text = "\(PhotoManager.sharedInstance.assets.count)"
+            updateCurrentCollectionAssetCount()
+        }
+    }
+    
+    @IBOutlet weak var checkCountLabel: UILabel? {
+        didSet {
+            updateCurrentSelectedCount()
         }
     }
     
     @IBOutlet weak var collectionView: UICollectionView!
-    
-    @IBOutlet weak var checkBtn: UIButton!
+    @IBOutlet weak var checkBtn: UIButton?
     
     var delegate: CSPhotoGalleryDelegate?
     var currentIndexPath: IndexPath = IndexPath(item: 0, section: 0) {
         didSet {
             if PhotoManager.sharedInstance.assetsCount > 0 {
-                setCurrentIndexLabel()
+                updateCurrentIndexLabel()
                 updateCheckBtnUI()
             }
+        }
+    }
+    var currentImageView: UIImageView? {
+        didSet {
+//            currentImageView?.image = currentImageView?.image?.clipRect
         }
     }
     
@@ -62,6 +71,7 @@ private extension CSPhotoGalleryDetailViewController {
         let identifier = PhotoManager.sharedInstance.getLocalIdentifier(at: currentIndexPath)
         PhotoManager.sharedInstance.setSelectedIndexPath(identifier: identifier)
         updateCheckBtnUI()
+        updateCurrentSelectedCount()
     }
     
     @IBAction func okBtnAction(_ sender: Any) {
@@ -82,18 +92,40 @@ fileprivate extension CSPhotoGalleryDetailViewController {
     }
     
     private func setView() {
-        setCurrentIndexLabel()
         scrollToCurrentIndexPath()
+    }
+    
+    func updateCurrentSelectedCount() {
+        DispatchQueue.main.async {
+            self.checkCountLabel?.text = "\(PhotoManager.sharedInstance.assets.count)"
+        }
+    }
+    
+    func updateCurrentIndexLabel() {
+        DispatchQueue.main.async {
+            self.currentIndexLabel?.text = "\(self.currentIndexPath.item + 1)"
+        }
+    }
+    
+    func updateCurrentCollectionAssetCount() {
+        DispatchQueue.main.async {
+            self.currentCollectionCountLabel?.text = "\(PhotoManager.sharedInstance.assetsCount)"
+        }
+    }
+    
+    func updateCheckBtnUI() {
+        DispatchQueue.main.async {
+            let identifier = PhotoManager.sharedInstance.getLocalIdentifier(at: self.currentIndexPath)
+            if PhotoManager.sharedInstance.isSelectedIndexPath(identifier: identifier) {
+                self.checkBtn?.setImage(UIImage(named: "check_select"), for: .normal)
+            } else {
+                self.checkBtn?.setImage(UIImage(named: "check_default"), for: .normal)
+            }
+        }
     }
     
     func scrollToCurrentIndexPath() {
         collectionView.scrollToItem(at: currentIndexPath, at: .left, animated: false)
-    }
-    
-    func setCurrentIndexLabel() {
-        DispatchQueue.main.async {
-            self.currentIndexLabel.text = "\(self.currentIndexPath.item + 1)"
-        }
     }
 }
 
@@ -101,17 +133,6 @@ fileprivate extension CSPhotoGalleryDetailViewController {
 fileprivate extension CSPhotoGalleryDetailViewController {
     func dismiss() {
         dismiss(animated: true, completion: nil)
-    }
-    
-    func updateCheckBtnUI() {
-        DispatchQueue.main.async {
-            let identifier = PhotoManager.sharedInstance.getLocalIdentifier(at: self.currentIndexPath)
-            if PhotoManager.sharedInstance.isSelectedIndexPath(identifier: identifier) {
-                self.checkBtn.setImage(UIImage(named: "check_select"), for: .normal)
-            } else {
-                self.checkBtn.setImage(UIImage(named: "check_default"), for: .normal)
-            }
-        }
     }
 }
 
@@ -124,13 +145,14 @@ extension CSPhotoGalleryDetailViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(indexPath: indexPath) as CSPhotoGalleryDetailCollectionViewCell
         let asset = PhotoManager.sharedInstance.getCurrentCollectionAsset(at: indexPath)
-        let size = CGSize(width: asset.pixelWidth, height: asset.pixelHeight)
         
         cell.representedAssetIdentifier = asset.localIdentifier
         
+        let size = CGSize(width: asset.pixelWidth, height: asset.pixelHeight)
         PhotoManager.sharedInstance.setThumbnailImage(at: indexPath, thumbnailSize: size, isCliping: false) { image in
             if cell.representedAssetIdentifier == asset.localIdentifier {
                 cell.imageView.image = image
+                self.currentImageView = cell.imageView
             }
         }
         
@@ -140,17 +162,16 @@ extension CSPhotoGalleryDetailViewController: UICollectionViewDataSource {
 
 //  MARK:- UICollectionView Delegate
 extension CSPhotoGalleryDetailViewController: UICollectionViewDelegateFlowLayout {
-    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
         var visibleRect = CGRect()
         
         visibleRect.origin = collectionView.contentOffset
         visibleRect.size = collectionView.bounds.size
         
         let visiblePoint = CGPoint(x: visibleRect.midX, y: visibleRect.midY)
-        
-        let visibleIndexPath: IndexPath = collectionView.indexPathForItem(at: visiblePoint)!
-        
-        currentIndexPath = visibleIndexPath
+        if let visibleIndexPath: IndexPath = collectionView.indexPathForItem(at: visiblePoint) {
+            currentIndexPath = visibleIndexPath
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {

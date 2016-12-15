@@ -30,10 +30,12 @@ public class CSPhotoGalleryViewController: UIViewController {
     fileprivate var thumbnailSize: CGSize = CGSize.zero
     fileprivate var CSObservationContext = CSObservation()
     fileprivate var CSCollectionObservationContext = CSObservation()
+    fileprivate var transitionDelegate: CSPhotoViewerTransition = CSPhotoViewerTransition()
     
     var delegate: CSPhotoGalleryDelegate?
     var mediaType: CSPhotoImageType = .image
     var CHECK_MAX_COUNT = 20
+    
     
     override public func viewDidLoad() {
         super.viewDidLoad()
@@ -41,6 +43,12 @@ public class CSPhotoGalleryViewController: UIViewController {
         // Do any additional setup after loading the view.
         setThumbnailSize()
         checkPhotoLibraryPermission()
+    }
+    
+    override public func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        reloadCollectionView()
     }
     
     override public func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
@@ -185,11 +193,24 @@ extension CSPhotoGalleryViewController: UICollectionViewDataSource {
 //  MARK:- UICollectionView Delegate
 extension CSPhotoGalleryViewController: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        //  Present photo viewer
-        let vc = CSPhotoGalleryDetailViewController.sharedInstance
-        vc.delegate = delegate
-        vc.currentIndexPath = indexPath
-        present(vc, animated: true, completion: nil)
+        let asset = PhotoManager.sharedInstance.getCurrentCollectionAsset(at: indexPath)
+        PhotoManager.sharedInstance.assetToImage(asset: asset, imageSize: CGSize(width: asset.pixelWidth, height: asset.pixelHeight)) { image in
+            //  Present photo viewer
+            let cell = collectionView.cellForItem(at: indexPath)
+            let vc = CSPhotoGalleryDetailViewController.sharedInstance
+            
+            var frame = cell!.frame
+            frame.origin.y = frame.minY + collectionView.frame.minY
+            self.transitionDelegate.initialRect = frame
+            self.transitionDelegate.originalImage = image
+            
+            vc.delegate = self.delegate
+            vc.currentIndexPath = indexPath
+            vc.transitioningDelegate = self.transitionDelegate
+            vc.modalPresentationStyle = .custom
+            
+            self.present(vc, animated: true, completion: nil)
+        }
     }
     
     public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
