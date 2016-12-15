@@ -36,7 +36,7 @@ class CSPhotoGalleryDetailViewController: UIViewController {
         didSet {
             if PhotoManager.sharedInstance.assetsCount > 0 {
                 setCurrentIndexLabel()
-                updateCheckBtnUI(identifier: PhotoManager.sharedInstance.getLocalIdentifier(at: currentIndexPath))
+                updateCheckBtnUI()
             }
         }
     }
@@ -59,7 +59,9 @@ private extension CSPhotoGalleryDetailViewController {
     }
     
     @IBAction func checkBtnAction(_ sender: Any) {
-        
+        let identifier = PhotoManager.sharedInstance.getLocalIdentifier(at: currentIndexPath)
+        PhotoManager.sharedInstance.setSelectedIndexPath(identifier: identifier)
+        updateCheckBtnUI()
     }
     
     @IBAction func okBtnAction(_ sender: Any) {
@@ -101,8 +103,9 @@ fileprivate extension CSPhotoGalleryDetailViewController {
         dismiss(animated: true, completion: nil)
     }
     
-    func updateCheckBtnUI(identifier: String) {
+    func updateCheckBtnUI() {
         DispatchQueue.main.async {
+            let identifier = PhotoManager.sharedInstance.getLocalIdentifier(at: self.currentIndexPath)
             if PhotoManager.sharedInstance.isSelectedIndexPath(identifier: identifier) {
                 self.checkBtn.setImage(UIImage(named: "check_select"), for: .normal)
             } else {
@@ -125,24 +128,7 @@ extension CSPhotoGalleryDetailViewController: UICollectionViewDataSource {
         
         cell.representedAssetIdentifier = asset.localIdentifier
         
-        let assetWidth = CGFloat(asset.pixelWidth)
-        let assetHeight = CGFloat(asset.pixelHeight)
-        var width: CGFloat = 0
-        var height: CGFloat = 0
-        
-        //  가로로 긴 사진이라면
-        if assetWidth > assetHeight {
-            width = collectionView.frame.width
-            height = collectionView.frame.width * assetHeight / assetWidth
-        } else {
-            width = assetWidth * collectionView.frame.height / assetHeight
-            height = collectionView.frame.height
-        }
-        
-        cell.widthConstraint.constant = width
-        cell.heightConstraint.constant = height
-        
-        PhotoManager.sharedInstance.setThumbnailImage(at: indexPath, thumbnailSize: size) { image in
+        PhotoManager.sharedInstance.setThumbnailImage(at: indexPath, thumbnailSize: size, isCliping: false) { image in
             if cell.representedAssetIdentifier == asset.localIdentifier {
                 cell.imageView.image = image
             }

@@ -1,18 +1,17 @@
 //
-//  PhotoUtil.swift
+//  UIImageView+Extension.swift
 //  CSPhotoGallery
 //
-//  Created by Youk Chansim on 2016. 12. 13..
+//  Created by Naver on 2016. 12. 15..
 //  Copyright © 2016년 Youk Chansim. All rights reserved.
 //
 
 import UIKit
-import Photos
 
-class PhotoUtil {
-    static func cropImage(_ image: UIImage) -> UIImage {
+extension UIImage {
+    var cripRect: UIImage {
         // Create a copy of the image without the imageOrientation property so it is in its native orientation (landscape)
-        let contextImage: UIImage = image
+        let contextImage: UIImage = self
         
         // Get the size of the contextImage
         let contextSize: CGSize = contextImage.size
@@ -41,7 +40,7 @@ class PhotoUtil {
         let imageRef: CGImage = contextImage.cgImage!.cropping(to: rect)!
         
         // Create a new image based on the imageRef and rotate back to the original orientation
-        let cropImage = UIImage(cgImage: imageRef, scale: image.scale, orientation: image.imageOrientation)
+        let cropImage = UIImage(cgImage: imageRef, scale: self.scale, orientation: self.imageOrientation)
         
         return cropImage
     }

@@ -47,7 +47,9 @@ class PhotoManager: NSObject {
     dynamic var currentCollection: PHAssetCollection! {
         didSet {
             selectedIdentifiers = []
-            currentFetchResult = getAssetsInPHAssetCollection(collection: currentCollection)
+            if currentCollection != nil {
+                currentFetchResult = getAssetsInPHAssetCollection(collection: currentCollection)
+            }
         }
     }
     fileprivate var currentFetchResult: PHFetchResult<PHAsset>!
@@ -115,7 +117,7 @@ extension PhotoManager {
     
     //  Get PHAsset Count
     var assetsCount: Int {
-        return currentFetchResult.count
+        return currentFetchResult != nil ? currentFetchResult.count : 0
     }
     
     var assets: [PHAsset] {
@@ -133,16 +135,27 @@ extension PhotoManager {
     }
     
     //  Set ThumbnailImage
-    func setThumbnailImage(at indexPath: IndexPath, thumbnailSize: CGSize, completionHandler: ((UIImage)->())?) {
+    func setThumbnailImage(at indexPath: IndexPath, thumbnailSize: CGSize, isCliping: Bool = true,completionHandler: ((UIImage)->())?) {
         let asset = getCurrentCollectionAsset(at: indexPath)
-        assetToImage(asset: asset, imageSize: thumbnailSize, completionHandler: completionHandler)
+        if isCliping {
+            assetToClipImage(asset: asset, imageSize: thumbnailSize, completionHandler: completionHandler)
+        } else {
+            assetToImage(asset: asset, imageSize: thumbnailSize, completionHandler: completionHandler)
+        }
+    }
+    
+    func assetToClipImage(asset: PHAsset, imageSize: CGSize, completionHandler: ((UIImage)->())?) {
+        imageManager.requestImage(for: asset, targetSize: imageSize, contentMode: .aspectFill, options: imageRequestOptions) { image, _ in
+            if let thumbnameImage = image {
+                completionHandler?(thumbnameImage.cripRect)
+            }
+        }
     }
     
     func assetToImage(asset: PHAsset, imageSize: CGSize, completionHandler: ((UIImage)->())?) {
         imageManager.requestImage(for: asset, targetSize: imageSize, contentMode: .aspectFill, options: imageRequestOptions) { image, _ in
             if let thumbnameImage = image {
-                let clopImage = PhotoUtil.cropImage(thumbnameImage)
-                completionHandler?(clopImage)
+                completionHandler?(thumbnameImage)
             }
         }
     }
