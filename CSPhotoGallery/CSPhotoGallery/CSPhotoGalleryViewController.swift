@@ -12,6 +12,10 @@ import Photos
 typealias CSObservation = UInt8
 
 public class CSPhotoGalleryViewController: UIViewController {
+    static var sharedInstance: CSPhotoGalleryViewController {
+        let storyBoard = UIStoryboard.init(name: "Main", bundle: nil)
+        return storyBoard.instantiateViewController(withIdentifier: identifier) as! CSPhotoGalleryViewController
+    }
     
     @IBOutlet fileprivate weak var backBtn: UIButton!
     @IBOutlet fileprivate weak var collectionName: UILabel! {
@@ -44,12 +48,6 @@ public class CSPhotoGalleryViewController: UIViewController {
         checkPhotoLibraryPermission()
     }
     
-    override public func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        reloadCollectionView()
-    }
-    
     override public func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         if context == &CSObservationContext {
             let count = PhotoManager.sharedInstance.selectedItemCount
@@ -73,6 +71,32 @@ public class CSPhotoGalleryViewController: UIViewController {
 extension CSPhotoGalleryViewController {
     func collectionNameTap(_ sender: UITapGestureRecognizer) {
         assetCollectionViewController.isHidden = !assetCollectionViewController.isHidden
+    }
+    
+    func reloadCollectionView() {
+        DispatchQueue.main.async {
+            self.collectionView.reloadData()
+        }
+    }
+    
+    func updateCollectionViewCellUI(indexPath: IndexPath) {
+        DispatchQueue.main.async {
+            let cell = self.collectionView.cellForItem(at: indexPath) as? CSPhotoGalleryCollectionViewCell
+            cell?.setButtonImage()
+        }
+    }
+    
+    func collectionViewCellFrame(at indexPath: IndexPath) -> CGRect {
+        let item = collectionView.layoutAttributesForItem(at: indexPath)
+        
+        var frame = item!.frame
+        frame.origin.y = frame.origin.y - collectionView.contentOffset.y + collectionView.frame.origin.y
+        
+        return frame
+    }
+    
+    func scrollToCurrentIndexPath(indexPath: IndexPath) {
+        collectionView.scrollToItem(at: indexPath, at: .top, animated: false)
     }
 }
 
@@ -155,12 +179,6 @@ fileprivate extension CSPhotoGalleryViewController {
             case .notDetermined:
                 self.checkPhotoLibraryPermission()
             }
-        }
-    }
-    
-    func reloadCollectionView() {
-        DispatchQueue.main.async {
-            self.collectionView.reloadData()
         }
     }
 }

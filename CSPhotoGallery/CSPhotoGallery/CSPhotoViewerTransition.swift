@@ -82,7 +82,10 @@ class CSPhotoViewerDismissAnimation: NSObject, UIViewControllerAnimatedTransitio
         let animationDuration = self .transitionDuration(using: transitionContext)
         let containerView = transitionContext.containerView
         
+        let toViewController = transitionContext.viewController(forKey: UITransitionContextViewControllerKey.to)! as! CSPhotoGalleryViewController
         let fromViewController = transitionContext.viewController(forKey: UITransitionContextViewControllerKey.from)! as! CSPhotoGalleryDetailViewController
+        
+        let destinationFrame = toViewController.collectionViewCellFrame(at: fromViewController.currentIndexPath)
         
         let frame = getImageScaleFactor(originImage: originalImage, standardFrame: fromViewController.collectionView.frame)
         let imageView = UIImageView(frame: frame)
@@ -96,7 +99,7 @@ class CSPhotoViewerDismissAnimation: NSObject, UIViewControllerAnimatedTransitio
         })
         
         UIView.animate(withDuration: animationDuration, animations: {
-            imageView.frame = self.initialRect
+            imageView.frame = destinationFrame
         }) { complete in
             imageView.removeFromSuperview()
             transitionContext.completeTransition(!transitionContext.transitionWasCancelled)

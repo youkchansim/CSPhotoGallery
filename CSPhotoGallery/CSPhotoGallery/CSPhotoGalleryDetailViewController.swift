@@ -67,6 +67,9 @@ private extension CSPhotoGalleryDetailViewController {
         PhotoManager.sharedInstance.setSelectedIndexPath(identifier: identifier)
         updateCheckBtnUI()
         updateCurrentSelectedCount()
+        
+        let vc = presentingViewController as? CSPhotoGalleryViewController
+        vc?.updateCollectionViewCellUI(indexPath: currentIndexPath)
     }
     
     @IBAction func okBtnAction(_ sender: Any) {
