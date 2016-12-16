@@ -44,11 +44,6 @@ class CSPhotoGalleryDetailViewController: UIViewController {
             }
         }
     }
-    var currentImageView: UIImageView? {
-        didSet {
-//            currentImageView?.image = currentImageView?.image?.clipRect
-        }
-    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -152,7 +147,6 @@ extension CSPhotoGalleryDetailViewController: UICollectionViewDataSource {
         PhotoManager.sharedInstance.setThumbnailImage(at: indexPath, thumbnailSize: size, isCliping: false) { image in
             if cell.representedAssetIdentifier == asset.localIdentifier {
                 cell.imageView.image = image
-                self.currentImageView = cell.imageView
             }
         }
         

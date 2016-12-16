@@ -36,7 +36,6 @@ public class CSPhotoGalleryViewController: UIViewController {
     var mediaType: CSPhotoImageType = .image
     var CHECK_MAX_COUNT = 20
     
-    
     override public func viewDidLoad() {
         super.viewDidLoad()
 
@@ -196,11 +195,11 @@ extension CSPhotoGalleryViewController: UICollectionViewDelegate, UICollectionVi
         let asset = PhotoManager.sharedInstance.getCurrentCollectionAsset(at: indexPath)
         PhotoManager.sharedInstance.assetToImage(asset: asset, imageSize: CGSize(width: asset.pixelWidth, height: asset.pixelHeight)) { image in
             //  Present photo viewer
-            let cell = collectionView.cellForItem(at: indexPath)
+            let item = collectionView.layoutAttributesForItem(at: indexPath)
             let vc = CSPhotoGalleryDetailViewController.sharedInstance
             
-            var frame = cell!.frame
-            frame.origin.y = frame.minY + collectionView.frame.minY
+            var frame = item!.frame
+            frame.origin.y = frame.origin.y - collectionView.contentOffset.y + collectionView.frame.origin.y
             self.transitionDelegate.initialRect = frame
             self.transitionDelegate.originalImage = image
             

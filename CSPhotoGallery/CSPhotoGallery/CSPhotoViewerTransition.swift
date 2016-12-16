@@ -42,32 +42,20 @@ class CSPhotoViewerPresentAnimation: NSObject, UIViewControllerAnimatedTransitio
         let animationDuration = self .transitionDuration(using: transitionContext)
         
         let imageView = UIImageView(image: originalImage)
+        imageView.contentMode = .scaleAspectFill
+        imageView.clipsToBounds = true
         imageView.frame = initialRect
-        
-        let imageWidth = CGFloat(originalImage.cgImage!.width)
-        let imageHeight = CGFloat(originalImage.cgImage!.height)
-        var scaleFactor: CGFloat = 1
-        
-        if imageWidth > imageHeight {
-            scaleFactor = toViewController.collectionView.frame.width / imageWidth
-        } else {
-            scaleFactor = toViewController.collectionView.frame.height / imageHeight
-        }
-        
-        let width = imageWidth * scaleFactor
-        let height = imageHeight * scaleFactor
-        let x = (toViewController.collectionView.frame.width - width) / 2
-        let y = (toViewController.collectionView.frame.height - height) / 2 + toViewController.collectionView.frame.origin.y
-        let frame = CGRect(origin: CGPoint(x: x, y: y), size: CGSize(width: width, height: height))
-        
         containerView.addSubview(imageView)
+        
         toViewController.view.alpha = 0
         containerView.frame = toViewController.view.frame
         containerView.addSubview(toViewController.view)
         
+        let frame = getImageScaleFactor(originImage: originalImage, standardFrame: toViewController.collectionView.frame)
         UIView.animate(withDuration: animationDuration) {
             imageView.frame = frame
         }
+        
         UIView.animate(withDuration: animationDuration, delay: 0.2, options: [], animations: {
             toViewController.view.alpha = 1
         }) { complete in
@@ -91,15 +79,21 @@ class CSPhotoViewerDismissAnimation: NSObject, UIViewControllerAnimatedTransitio
     }
     
     func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
-        let fromViewController = transitionContext.viewController(forKey: UITransitionContextViewControllerKey.from)! as! CSPhotoGalleryDetailViewController
         let animationDuration = self .transitionDuration(using: transitionContext)
         let containerView = transitionContext.containerView
         
-        let imageView = UIImageView(frame: fromViewController.currentImageView!.frame)
-        imageView.image = originalImage.clipRect
+        let fromViewController = transitionContext.viewController(forKey: UITransitionContextViewControllerKey.from)! as! CSPhotoGalleryDetailViewController
+        
+        let frame = getImageScaleFactor(originImage: originalImage, standardFrame: fromViewController.collectionView.frame)
+        let imageView = UIImageView(frame: frame)
+        imageView.contentMode = .scaleAspectFill
+        imageView.clipsToBounds = true
+        imageView.image = originalImage
         
         containerView.addSubview(imageView)
-        fromViewController.view.alpha = 0
+        UIView.animate(withDuration: animationDuration, animations: {
+            fromViewController.view.alpha = 0
+        })
         
         UIView.animate(withDuration: animationDuration, animations: {
             imageView.frame = self.initialRect
@@ -107,5 +101,26 @@ class CSPhotoViewerDismissAnimation: NSObject, UIViewControllerAnimatedTransitio
             imageView.removeFromSuperview()
             transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
         }
+    }
+}
+
+fileprivate extension UIViewControllerAnimatedTransitioning {
+    func getImageScaleFactor(originImage: UIImage, standardFrame: CGRect) -> CGRect {
+        let imageWidth = CGFloat(originImage.cgImage!.width)
+        let imageHeight = CGFloat(originImage.cgImage!.height)
+        var scaleFactor: CGFloat = 1
+        
+        if imageWidth > imageHeight {
+            scaleFactor = standardFrame.width / imageWidth
+        } else {
+            scaleFactor = standardFrame.height / imageHeight
+        }
+        
+        let width = imageWidth * scaleFactor
+        let height = imageHeight * scaleFactor
+        let x = (standardFrame.width - width) / 2
+        let y = (standardFrame.height - height) / 2 + standardFrame.origin.y
+        
+        return CGRect(origin: CGPoint(x: x, y: y), size: CGSize(width: width, height: height))
     }
 }

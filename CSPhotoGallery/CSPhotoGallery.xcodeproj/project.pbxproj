@@ -102,7 +102,9 @@
 		E9DF2F201DF849180076FE9F /* CSPhotoGallery */ = {
 			isa = PBXGroup;
 			children = (
+				4A4071C51DFF9C5F002B90A6 /* Extension */,
 				E96F780D1E02D112004643F3 /* Transition */,
+				E954AF861DFEE9B300868892 /* Delegate */,
 				E9DF2F3F1DF85DDA0076FE9F /* PhotoManager */,
 				E9DF2F341DF8496B0076FE9F /* ViewController */,
 				E9DF2F331DF849620076FE9F /* View */,
@@ -126,8 +128,6 @@
 		E9DF2F341DF8496B0076FE9F /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
-				4A4071C51DFF9C5F002B90A6 /* Extension */,
-				E954AF861DFEE9B300868892 /* Delegate */,
 				E9DF2F351DF849870076FE9F /* CSPhotoGalleryViewController.swift */,
 				4A4071C31DFF969A002B90A6 /* CSPhotoGalleryAssetCollectionViewController.swift */,
 				E9DF2F381DF8499E0076FE9F /* CSPhotoGalleryDetailViewController.swift */,
