@@ -222,22 +222,26 @@ extension CSPhotoGalleryViewController: UICollectionViewDelegate, UICollectionVi
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         scrollRectToVisible(indexPath: indexPath)
         let asset = PhotoManager.sharedInstance.getCurrentCollectionAsset(at: indexPath)
-        PhotoManager.sharedInstance.assetToImage(asset: asset, imageSize: CGSize(width: asset.pixelWidth, height: asset.pixelHeight)) { image in
-            //  Present photo viewer
-            let item = collectionView.layoutAttributesForItem(at: indexPath)
-            let vc = CSPhotoGalleryDetailViewController.sharedInstance
+        if mediaType == .image {
+            PhotoManager.sharedInstance.assetToImage(asset: asset, imageSize: CGSize(width: asset.pixelWidth, height: asset.pixelHeight)) { image in
+                //  Present photo viewer
+                let item = collectionView.layoutAttributesForItem(at: indexPath)
+                let vc = CSPhotoGalleryDetailViewController.sharedInstance
+                
+                var frame = item!.frame
+                frame.origin.y = frame.origin.y - collectionView.contentOffset.y + collectionView.frame.origin.y
+                self.transitionDelegate.initialRect = frame
+                self.transitionDelegate.originalImage = image
+                
+                vc.delegate = self.delegate
+                vc.currentIndexPath = indexPath
+                vc.transitioningDelegate = self.transitionDelegate
+                vc.modalPresentationStyle = .custom
+                
+                self.present(vc, animated: true, completion: nil)
+            }
+        } else {
             
-            var frame = item!.frame
-            frame.origin.y = frame.origin.y - collectionView.contentOffset.y + collectionView.frame.origin.y
-            self.transitionDelegate.initialRect = frame
-            self.transitionDelegate.originalImage = image
-            
-            vc.delegate = self.delegate
-            vc.currentIndexPath = indexPath
-            vc.transitioningDelegate = self.transitionDelegate
-            vc.modalPresentationStyle = .custom
-            
-            self.present(vc, animated: true, completion: nil)
         }
     }
     
