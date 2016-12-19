@@ -18,7 +18,7 @@ class CSPhotoViewerTransition: NSObject, UIViewControllerTransitioningDelegate {
     }
     
     func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        let dismissAnimation = CSPhotoViewerDismissAnimation(initialRect: initialRect, originalImage: originalImage)
+        let dismissAnimation = CSPhotoViewerDismissAnimation()
         return dismissAnimation
     }
 }
@@ -66,14 +66,6 @@ class CSPhotoViewerPresentAnimation: NSObject, UIViewControllerAnimatedTransitio
 }
 
 class CSPhotoViewerDismissAnimation: NSObject, UIViewControllerAnimatedTransitioning {
-    let initialRect: CGRect
-    let originalImage: UIImage
-    
-    init(initialRect: CGRect, originalImage: UIImage) {
-        self.initialRect = initialRect
-        self.originalImage = originalImage
-    }
-    
     func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
         return 0.3
     }
@@ -85,13 +77,14 @@ class CSPhotoViewerDismissAnimation: NSObject, UIViewControllerAnimatedTransitio
         let toViewController = transitionContext.viewController(forKey: UITransitionContextViewControllerKey.to)! as! CSPhotoGalleryViewController
         let fromViewController = transitionContext.viewController(forKey: UITransitionContextViewControllerKey.from)! as! CSPhotoGalleryDetailViewController
         
+        let originImage = fromViewController.currentImage ?? UIImage()
         let destinationFrame = toViewController.collectionViewCellFrame(at: fromViewController.currentIndexPath)
         
-        let frame = getImageScaleFactor(originImage: originalImage, standardFrame: fromViewController.collectionView.frame)
+        let frame = getImageScaleFactor(originImage: originImage, standardFrame: fromViewController.collectionView.frame)
         let imageView = UIImageView(frame: frame)
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
-        imageView.image = originalImage
+        imageView.image = originImage
         
         containerView.addSubview(imageView)
         UIView.animate(withDuration: animationDuration, animations: {

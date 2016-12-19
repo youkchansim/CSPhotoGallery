@@ -45,6 +45,8 @@ class CSPhotoGalleryDetailViewController: UIViewController {
         }
     }
     
+    var currentImage: UIImage?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -57,6 +59,7 @@ class CSPhotoGalleryDetailViewController: UIViewController {
     }
 }
 
+//  IBAction
 private extension CSPhotoGalleryDetailViewController {
     @IBAction func backBtnAction(_ sender: Any) {
         dismiss()
@@ -130,7 +133,16 @@ fileprivate extension CSPhotoGalleryDetailViewController {
 //  MARK:- Extension
 fileprivate extension CSPhotoGalleryDetailViewController {
     func dismiss() {
-        dismiss(animated: true, completion: nil)
+        let presentingVC = presentingViewController as! CSPhotoGalleryViewController
+        presentingVC.scrollRectToVisible(indexPath: currentIndexPath)
+        
+        let asset = PhotoManager.sharedInstance.getCurrentCollectionAsset(at: currentIndexPath)
+        let size = CGSize(width: asset.pixelWidth, height: asset.pixelHeight)
+        
+        PhotoManager.sharedInstance.assetToImage(asset: asset, imageSize: size) { image in
+            self.currentImage = image
+            self.dismiss(animated: true, completion: nil)
+        }
     }
 }
 

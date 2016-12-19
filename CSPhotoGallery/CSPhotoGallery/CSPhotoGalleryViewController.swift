@@ -39,6 +39,7 @@ public class CSPhotoGalleryViewController: UIViewController {
     var delegate: CSPhotoGalleryDelegate?
     var mediaType: CSPhotoImageType = .image
     var CHECK_MAX_COUNT = 20
+    var horizontalCount: CGFloat = 3
     
     override public func viewDidLoad() {
         super.viewDidLoad()
@@ -95,8 +96,17 @@ extension CSPhotoGalleryViewController {
         return frame
     }
     
-    func scrollToCurrentIndexPath(indexPath: IndexPath) {
-        collectionView.scrollToItem(at: indexPath, at: .top, animated: false)
+    func scrollRectToVisible(indexPath: IndexPath) {
+        let rect = collectionView.layoutAttributesForItem(at: indexPath)?.frame ?? CGRect.zero
+        let currentOffsetY = collectionView.contentOffset.y
+        
+        //  상단
+        if currentOffsetY > rect.origin.y {
+            collectionView.contentOffset.y = rect.origin.y
+        //  하단
+        } else if currentOffsetY + collectionView.frame.height < rect.origin.y + rect.height {
+            collectionView.contentOffset.y = rect.origin.y + rect.height - collectionView.frame.height
+        }
     }
 }
 
@@ -210,6 +220,7 @@ extension CSPhotoGalleryViewController: UICollectionViewDataSource {
 //  MARK:- UICollectionView Delegate
 extension CSPhotoGalleryViewController: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        scrollRectToVisible(indexPath: indexPath)
         let asset = PhotoManager.sharedInstance.getCurrentCollectionAsset(at: indexPath)
         PhotoManager.sharedInstance.assetToImage(asset: asset, imageSize: CGSize(width: asset.pixelWidth, height: asset.pixelHeight)) { image in
             //  Present photo viewer
@@ -231,7 +242,7 @@ extension CSPhotoGalleryViewController: UICollectionViewDelegate, UICollectionVi
     }
     
     public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let size = (collectionView.bounds.width - 2) / 3
+        let size = (collectionView.bounds.width - horizontalCount - 1) / horizontalCount
         return CGSize(width: size, height: size)
     }
 }
