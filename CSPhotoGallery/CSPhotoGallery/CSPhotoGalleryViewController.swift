@@ -36,15 +36,16 @@ public class CSPhotoGalleryViewController: UIViewController {
     fileprivate var CSCollectionObservationContext = CSObservation()
     fileprivate var transitionDelegate: CSPhotoViewerTransition = CSPhotoViewerTransition()
     
-    var delegate: CSPhotoGalleryDelegate?
-    var mediaType: CSPhotoImageType = .image
-    var CHECK_MAX_COUNT = 20
-    var horizontalCount: CGFloat = 3
+    public var delegate: CSPhotoGalleryDelegate?
+    public var mediaType: CSPhotoImageType = .video
+    public var CHECK_MAX_COUNT = 20
+    public var horizontalCount: CGFloat = 3
     
     override public func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        setViewController()
         setThumbnailSize()
         checkPhotoLibraryPermission()
     }
@@ -181,9 +182,7 @@ fileprivate extension CSPhotoGalleryViewController {
         PHPhotoLibrary.requestAuthorization() { status in
             switch status {
             case .authorized:
-                DispatchQueue.main.async {
-                    self.setViewController()
-                }
+                self.reloadCollectionView()
             case .denied, .restricted:
                 break
             case .notDetermined:
@@ -200,20 +199,36 @@ extension CSPhotoGalleryViewController: UICollectionViewDataSource {
     }
     
     public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(indexPath: indexPath) as CSPhotoGalleryCollectionViewCell
-        cell.indexPath = indexPath
-        cell.representedAssetIdentifier = PhotoManager.sharedInstance.getLocalIdentifier(at: indexPath)
+        let asset = PhotoManager.sharedInstance.getCurrentCollectionAsset(at: indexPath)
         
-        cell.setPlaceHolderImage(image: nil)
-        cell.setButtonImage()
+        var cell: CSPhotoGalleryCollectionViewCell?
+        
+        switch asset.mediaType {
+        case .image:
+            cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CSPhotoGalleryCollectionViewCell", for: indexPath) as? CSPhotoGalleryCollectionViewCell
+        case .video:
+            cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CSPhotoGalleryVideoCollectionViewCell", for: indexPath) as? CSPhotoGalleryCollectionViewCell
+        default:
+            break
+        }
+        
+        cell?.indexPath = indexPath
+        cell?.representedAssetIdentifier = PhotoManager.sharedInstance.getLocalIdentifier(at: indexPath)
+        
+        cell?.setPlaceHolderImage(image: nil)
+        cell?.setButtonImage()
         
         PhotoManager.sharedInstance.setThumbnailImage(at: indexPath, thumbnailSize: thumbnailSize) { image in
-            if cell.representedAssetIdentifier == PhotoManager.sharedInstance.getLocalIdentifier(at: indexPath) {
-                cell.setImage(image: image)
+            if cell?.representedAssetIdentifier == PhotoManager.sharedInstance.getLocalIdentifier(at: indexPath) {
+                cell?.setImage(image: image)
             }
         }
         
-        return cell
+        if let collectionViewCell = cell {
+            return collectionViewCell
+        } else {
+            return UICollectionViewCell()
+        }
     }
 }
 
@@ -222,7 +237,8 @@ extension CSPhotoGalleryViewController: UICollectionViewDelegate, UICollectionVi
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         scrollRectToVisible(indexPath: indexPath)
         let asset = PhotoManager.sharedInstance.getCurrentCollectionAsset(at: indexPath)
-        if mediaType == .image {
+        
+        if asset.mediaType == .image {
             PhotoManager.sharedInstance.assetToImage(asset: asset, imageSize: CGSize(width: asset.pixelWidth, height: asset.pixelHeight)) { image in
                 //  Present photo viewer
                 let item = collectionView.layoutAttributesForItem(at: indexPath)
@@ -240,8 +256,28 @@ extension CSPhotoGalleryViewController: UICollectionViewDelegate, UICollectionVi
                 
                 self.present(vc, animated: true, completion: nil)
             }
-        } else {
-            
+        } else if asset.mediaType == .video {
+            PHCachingImageManager().requestAVAsset(forVideo: asset,
+                                         options: nil,
+                                         resultHandler: {(asset: AVAsset?,
+                                            audioMix: AVAudioMix?,
+                                            info: [AnyHashable: Any]?) in
+                                            
+                                            /* Did we get the URL to the video? */
+                                            if let asset = asset as? AVURLAsset{
+                                                let player = AVPlayer(url: asset.url)
+                                                let playerViewController = CSVideoViewController()
+                                                playerViewController.player = player
+                                                
+                                                self.present(playerViewController, animated: true) {
+                                                    if let validPlayer = playerViewController.player {
+                                                        validPlayer.play()
+                                                    }
+                                                }
+                                            } else {
+                                                print("This is not a URL asset. Cannot play")
+                                            }
+            })
         }
     }
     

@@ -13,6 +13,4 @@ class CSPhotoGalleryDetailCollectionViewCell: UICollectionViewCell {
     var representedAssetIdentifier: String?
     
     @IBOutlet weak var imageView: UIImageView!
-    @IBOutlet weak var imageViewHeightConstraint: NSLayoutConstraint!
-    @IBOutlet weak var imageViewWidthConstraint: NSLayoutConstraint!
 }

@@ -11,18 +11,18 @@ import UIKit
 class CSPhotoGalleryCollectionViewCell: UICollectionViewCell {
     
     @IBOutlet weak var imageView: UIImageView!
-    @IBOutlet private weak var checkBtn: UIButton!
-    
-    @IBAction private func checkBtnAction(_ sender: Any) {
-        if indexPath != nil {
-            PhotoManager.sharedInstance.setSelectedIndexPath(identifier: representedAssetIdentifier!)
-            setButtonImage()
-        }
-    }
+    @IBOutlet fileprivate weak var checkBtn: UIButton!
     
     var indexPath: IndexPath?
     var representedAssetIdentifier: String?
     
+    override func prepareForReuse() {
+        imageView.image = nil
+    }
+}
+
+//  MARK:- Extension
+extension CSPhotoGalleryCollectionViewCell {
     func setButtonImage() {
         DispatchQueue.main.async {
             if PhotoManager.sharedInstance.isSelectedIndexPath(identifier: self.representedAssetIdentifier!) {
@@ -39,5 +39,15 @@ class CSPhotoGalleryCollectionViewCell: UICollectionViewCell {
     
     func setImage(image: UIImage?) {
         self.imageView.image = image
+    }
+}
+
+//  MARK:- IBAction
+extension CSPhotoGalleryCollectionViewCell {
+    @IBAction private func checkBtnAction(_ sender: Any) {
+        if indexPath != nil {
+            PhotoManager.sharedInstance.setSelectedIndexPath(identifier: representedAssetIdentifier!)
+            setButtonImage()
+        }
     }
 }

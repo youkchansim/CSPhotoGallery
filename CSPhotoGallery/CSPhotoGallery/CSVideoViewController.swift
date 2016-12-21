@@ -7,6 +7,7 @@
 //
 
 import AVKit
+import Photos
 
 class CSVideoViewController: AVPlayerViewController {
     

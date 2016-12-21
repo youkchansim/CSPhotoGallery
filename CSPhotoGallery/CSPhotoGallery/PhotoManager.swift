@@ -16,7 +16,7 @@ enum Section: Int {
     static let count = 2
 }
 
-enum CSPhotoImageType {
+public enum CSPhotoImageType {
     case image
     case video
     
@@ -60,7 +60,7 @@ class PhotoManager: NSObject {
     override private init() {
         super.init()
         
-        initPhotoManager()
+//        initPhotoManager()
     }
 }
 
@@ -117,7 +117,7 @@ extension PhotoManager {
     
     //  Get PHAsset Count
     var assetsCount: Int {
-        return currentFetchResult != nil ? currentFetchResult.count : 0
+        return currentFetchResult.count
     }
     
     var assets: [PHAsset] {
@@ -207,7 +207,7 @@ extension PhotoManager {
     func getAssetsInPHAssetCollection(collection: PHAssetCollection) -> PHFetchResult<PHAsset> {
         let fetchOptions = PHFetchOptions()
         fetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
-        fetchOptions.predicate = NSPredicate(format: "mediaType = %d", CSPhotoImageType.image.type.rawValue)
+        fetchOptions.predicate = NSPredicate(format: "mediaType = %d", mediaType.type.rawValue)
         return PHAsset.fetchAssets(in: collection, options: fetchOptions)
     }
     
