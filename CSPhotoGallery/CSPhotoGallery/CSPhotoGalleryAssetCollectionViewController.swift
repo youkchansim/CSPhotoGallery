@@ -10,7 +10,7 @@ import UIKit
 import Photos
 
 class CSPhotoGalleryAssetCollectionViewController: UIViewController {
-    static var sharedInstance: CSPhotoGalleryAssetCollectionViewController {
+    static var instance: CSPhotoGalleryAssetCollectionViewController {
         let storyBoard = UIStoryboard.init(name: "Main", bundle: nil)
         return storyBoard.instantiateViewController(withIdentifier: identifier) as! CSPhotoGalleryAssetCollectionViewController
     }

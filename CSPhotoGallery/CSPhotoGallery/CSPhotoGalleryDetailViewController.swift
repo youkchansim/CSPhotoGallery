@@ -9,7 +9,7 @@
 import UIKit
 
 class CSPhotoGalleryDetailViewController: UIViewController {
-    static var sharedInstance: CSPhotoGalleryDetailViewController {
+    static var instance: CSPhotoGalleryDetailViewController {
         let storyBoard = UIStoryboard.init(name: "Main", bundle: nil)
         return storyBoard.instantiateViewController(withIdentifier: identifier) as! CSPhotoGalleryDetailViewController
     }
@@ -157,6 +157,7 @@ extension CSPhotoGalleryDetailViewController: UICollectionViewDataSource {
         let asset = PhotoManager.sharedInstance.getCurrentCollectionAsset(at: indexPath)
         
         cell.representedAssetIdentifier = asset.localIdentifier
+        cell.scrollView.zoomScale = 1.0
         
         let size = CGSize(width: asset.pixelWidth, height: asset.pixelHeight)
         PhotoManager.sharedInstance.setThumbnailImage(at: indexPath, thumbnailSize: size, isCliping: false) { image in
@@ -185,5 +186,13 @@ extension CSPhotoGalleryDetailViewController: UICollectionViewDelegateFlowLayout
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return collectionView.frame.size
+    }
+}
+
+//  MARK:- UIScrollView Delegate
+extension CSPhotoGalleryDetailViewController: UIScrollViewDelegate {
+    func viewForZooming(in scrollView: UIScrollView) -> UIView? {
+        let cell = collectionView.cellForItem(at: currentIndexPath) as? CSPhotoGalleryDetailCollectionViewCell
+        return cell?.imageView
     }
 }

@@ -142,7 +142,7 @@
                                         </connections>
                                     </collectionViewCell>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" restorationIdentifier="CSPhotoGalleryVideoCollectionViewCell" reuseIdentifier="CSPhotoGalleryVideoCollectionViewCell" id="oTT-fW-taq" customClass="CSPhotoGalleryCollectionViewCell" customModule="CSPhotoGallery" customModuleProvider="target">
-                                        <rect key="frame" x="135" y="0.0" width="106" height="100"/>
+                                        <rect key="frame" x="134.5" y="0.0" width="106" height="100"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                             <rect key="frame" x="0.0" y="0.0" width="106" height="100"/>
@@ -155,13 +155,12 @@
                                                     <rect key="frame" x="0.0" y="0.0" width="106" height="100"/>
                                                     <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                                 </view>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="video_play" translatesAutoresizingMaskIntoConstraints="NO" id="s9D-2U-y5b">
-                                                    <rect key="frame" x="35" y="32" width="36" height="36"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="width" constant="36" id="dDs-2J-GP7"/>
-                                                        <constraint firstAttribute="height" constant="36" id="xhp-Bc-bB7"/>
-                                                    </constraints>
-                                                </imageView>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7n9-ev-slL">
+                                                    <rect key="frame" x="60.5" y="10" width="35.5" height="17"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CC6-va-skj">
                                                     <rect key="frame" x="70" y="64" width="28" height="28"/>
                                                     <constraints>
@@ -180,19 +179,20 @@
                                             <constraint firstAttribute="bottom" secondItem="kpJ-ry-c62" secondAttribute="bottom" id="60V-ue-1M6"/>
                                             <constraint firstAttribute="trailing" secondItem="Utf-im-SVx" secondAttribute="trailing" id="HJ8-oQ-g7Y"/>
                                             <constraint firstAttribute="bottom" secondItem="CC6-va-skj" secondAttribute="bottom" constant="8" id="HTK-nh-qmN"/>
+                                            <constraint firstAttribute="trailing" secondItem="7n9-ev-slL" secondAttribute="trailing" constant="10" id="HUc-uD-AC0"/>
                                             <constraint firstAttribute="bottom" secondItem="Utf-im-SVx" secondAttribute="bottom" id="KEh-od-ogu"/>
                                             <constraint firstAttribute="trailing" secondItem="CC6-va-skj" secondAttribute="trailing" constant="8" id="L7w-xD-bW6"/>
                                             <constraint firstItem="kpJ-ry-c62" firstAttribute="leading" secondItem="oTT-fW-taq" secondAttribute="leading" id="Nf4-Go-egQ"/>
-                                            <constraint firstItem="s9D-2U-y5b" firstAttribute="centerX" secondItem="oTT-fW-taq" secondAttribute="centerX" id="OvT-kY-bWD"/>
+                                            <constraint firstItem="7n9-ev-slL" firstAttribute="top" secondItem="oTT-fW-taq" secondAttribute="top" constant="10" id="Zib-r9-evz"/>
                                             <constraint firstItem="kpJ-ry-c62" firstAttribute="top" secondItem="oTT-fW-taq" secondAttribute="top" id="dxc-W9-OMA"/>
                                             <constraint firstItem="Utf-im-SVx" firstAttribute="top" secondItem="oTT-fW-taq" secondAttribute="top" id="hLH-0u-5Ui"/>
                                             <constraint firstItem="Utf-im-SVx" firstAttribute="leading" secondItem="oTT-fW-taq" secondAttribute="leading" id="hXG-cF-drm"/>
-                                            <constraint firstItem="s9D-2U-y5b" firstAttribute="centerY" secondItem="oTT-fW-taq" secondAttribute="centerY" id="kFz-lf-sCo"/>
                                             <constraint firstAttribute="trailing" secondItem="kpJ-ry-c62" secondAttribute="trailing" id="v31-7Z-TAL"/>
                                         </constraints>
                                         <connections>
                                             <outlet property="checkBtn" destination="CC6-va-skj" id="bXF-Zi-8F0"/>
                                             <outlet property="imageView" destination="kpJ-ry-c62" id="ER9-MN-dUF"/>
+                                            <outlet property="timeLabel" destination="7n9-ev-slL" id="6Gs-o7-vX3"/>
                                         </connections>
                                     </collectionViewCell>
                                 </cells>
@@ -258,25 +258,46 @@
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="453"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView clipsSubviews="YES" contentMode="scaleAspectFit" horizontalHuggingPriority="1000" verticalHuggingPriority="1000" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" translatesAutoresizingMaskIntoConstraints="NO" id="zfd-yd-KR8">
-                                                    <rect key="frame" x="187.5" y="226.5" width="0.0" height="0.0"/>
+                                                <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fjJ-8k-Dh6">
+                                                    <rect key="frame" x="187" y="226.5" width="0.0" height="0.0"/>
+                                                    <subviews>
+                                                        <imageView clipsSubviews="YES" contentMode="scaleAspectFit" horizontalHuggingPriority="1000" verticalHuggingPriority="1000" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" translatesAutoresizingMaskIntoConstraints="NO" id="zfd-yd-KR8"/>
+                                                    </subviews>
                                                     <constraints>
-                                                        <constraint firstAttribute="height" priority="900" id="YWJ-gs-Ej2"/>
-                                                        <constraint firstAttribute="width" priority="900" id="Zeg-oY-k6Q"/>
+                                                        <constraint firstItem="zfd-yd-KR8" firstAttribute="top" secondItem="fjJ-8k-Dh6" secondAttribute="top" id="1ZG-lS-t9A"/>
+                                                        <constraint firstItem="zfd-yd-KR8" firstAttribute="centerY" secondItem="fjJ-8k-Dh6" secondAttribute="centerY" id="2a7-J2-fL8"/>
+                                                        <constraint firstItem="zfd-yd-KR8" firstAttribute="leading" secondItem="fjJ-8k-Dh6" secondAttribute="leading" id="4Wj-Hm-8e1"/>
+                                                        <constraint firstItem="zfd-yd-KR8" firstAttribute="centerX" secondItem="fjJ-8k-Dh6" secondAttribute="centerX" id="8Fb-sq-Z5F"/>
+                                                        <constraint firstAttribute="height" priority="900" id="Oqp-jl-mTR"/>
+                                                        <constraint firstAttribute="trailing" secondItem="zfd-yd-KR8" secondAttribute="trailing" id="nfZ-gt-xpT"/>
+                                                        <constraint firstAttribute="bottom" secondItem="zfd-yd-KR8" secondAttribute="bottom" id="xQR-9L-cwk"/>
+                                                        <constraint firstAttribute="width" priority="900" id="xjP-gd-PIL"/>
                                                     </constraints>
-                                                </imageView>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="number" keyPath="maximumZoomScale">
+                                                            <integer key="value" value="5"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                        <userDefinedRuntimeAttribute type="number" keyPath="minimumZoomScale">
+                                                            <integer key="value" value="1"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                    </userDefinedRuntimeAttributes>
+                                                    <connections>
+                                                        <outlet property="delegate" destination="7hl-YS-b0Z" id="oEu-6F-Bp4"/>
+                                                    </connections>
+                                                </scrollView>
                                             </subviews>
                                         </view>
                                         <constraints>
-                                            <constraint firstItem="zfd-yd-KR8" firstAttribute="top" relation="greaterThanOrEqual" secondItem="hfc-SG-QW5" secondAttribute="top" id="6Ca-vp-Asa"/>
-                                            <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="zfd-yd-KR8" secondAttribute="trailing" id="7Uo-mn-W29"/>
-                                            <constraint firstItem="zfd-yd-KR8" firstAttribute="centerY" secondItem="hfc-SG-QW5" secondAttribute="centerY" id="HGu-bX-Qye"/>
-                                            <constraint firstItem="zfd-yd-KR8" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="hfc-SG-QW5" secondAttribute="leading" id="LAr-Ds-jTj"/>
-                                            <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="zfd-yd-KR8" secondAttribute="bottom" id="PXI-gT-nRJ"/>
-                                            <constraint firstItem="zfd-yd-KR8" firstAttribute="centerX" secondItem="hfc-SG-QW5" secondAttribute="centerX" id="zgg-xj-Fie"/>
+                                            <constraint firstItem="fjJ-8k-Dh6" firstAttribute="top" relation="greaterThanOrEqual" secondItem="hfc-SG-QW5" secondAttribute="top" id="4Ij-2V-V7P"/>
+                                            <constraint firstItem="fjJ-8k-Dh6" firstAttribute="centerY" secondItem="hfc-SG-QW5" secondAttribute="centerY" id="Aer-1V-8bA"/>
+                                            <constraint firstItem="fjJ-8k-Dh6" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="hfc-SG-QW5" secondAttribute="leading" id="LXp-Og-bMT"/>
+                                            <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="fjJ-8k-Dh6" secondAttribute="trailing" id="OD2-n8-fQu"/>
+                                            <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="fjJ-8k-Dh6" secondAttribute="bottom" id="Reh-mg-l7R"/>
+                                            <constraint firstItem="fjJ-8k-Dh6" firstAttribute="centerX" secondItem="hfc-SG-QW5" secondAttribute="centerX" id="abu-Z8-z9j"/>
                                         </constraints>
                                         <connections>
                                             <outlet property="imageView" destination="zfd-yd-KR8" id="xTv-pR-Tem"/>
+                                            <outlet property="scrollView" destination="fjJ-8k-Dh6" id="Eru-sz-CwS"/>
                                         </connections>
                                     </collectionViewCell>
                                 </cells>
@@ -403,7 +424,7 @@
                                         <rect key="frame" x="0.0" y="28" width="375" height="80"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="uYe-Fl-CdN" id="Fp6-oY-apU">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="79"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="80"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="l52-ui-Sai">
@@ -470,6 +491,5 @@
         <image name="btn_back_black" width="11" height="20"/>
         <image name="btn_back_white" width="13" height="21"/>
         <image name="check_default" width="24" height="24"/>
-        <image name="video_play" width="35" height="35"/>
     </resources>
 </document>

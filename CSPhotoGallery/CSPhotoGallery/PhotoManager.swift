@@ -44,11 +44,11 @@ class PhotoManager: NSObject {
         }
     }
     dynamic private(set) var selectedItemCount: Int = 0
-    dynamic var currentCollection: PHAssetCollection! {
+    dynamic var currentCollection: PHAssetCollection? {
         didSet {
             selectedIdentifiers = []
             if currentCollection != nil {
-                currentFetchResult = getAssetsInPHAssetCollection(collection: currentCollection)
+                currentFetchResult = getAssetsInPHAssetCollection(collection: currentCollection!)
             }
         }
     }
@@ -117,7 +117,11 @@ extension PhotoManager {
     
     //  Get PHAsset Count
     var assetsCount: Int {
-        return currentFetchResult.count
+        guard let fetchResult = currentFetchResult else {
+            return 0
+        }
+        
+        return fetchResult.count
     }
     
     var assets: [PHAsset] {
@@ -211,12 +215,12 @@ extension PhotoManager {
         return PHAsset.fetchAssets(in: collection, options: fetchOptions)
     }
     
-    func getCurrentAsset() -> PHFetchResult<PHAsset> {
+    func getCurrentAsset() -> PHFetchResult<PHAsset>? {
         return currentFetchResult
     }
     
     func reloadCurrentAsset() {
-        currentFetchResult = getAssetsInPHAssetCollection(collection: currentCollection)
+        currentFetchResult = getAssetsInPHAssetCollection(collection: currentCollection!)
     }
 }
 

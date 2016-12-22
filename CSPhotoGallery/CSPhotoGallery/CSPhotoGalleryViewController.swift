@@ -12,7 +12,7 @@ import Photos
 typealias CSObservation = UInt8
 
 public class CSPhotoGalleryViewController: UIViewController {
-    static var sharedInstance: CSPhotoGalleryViewController {
+    static var instance: CSPhotoGalleryViewController {
         let storyBoard = UIStoryboard.init(name: "Main", bundle: nil)
         return storyBoard.instantiateViewController(withIdentifier: identifier) as! CSPhotoGalleryViewController
     }
@@ -30,14 +30,14 @@ public class CSPhotoGalleryViewController: UIViewController {
     
     @IBOutlet fileprivate weak var collectionView: UICollectionView!
     
-    fileprivate var assetCollectionViewController = CSPhotoGalleryAssetCollectionViewController.sharedInstance
+    fileprivate var assetCollectionViewController = CSPhotoGalleryAssetCollectionViewController.instance
     fileprivate var thumbnailSize: CGSize = CGSize.zero
     fileprivate var CSObservationContext = CSObservation()
     fileprivate var CSCollectionObservationContext = CSObservation()
     fileprivate var transitionDelegate: CSPhotoViewerTransition = CSPhotoViewerTransition()
     
     public var delegate: CSPhotoGalleryDelegate?
-    public var mediaType: CSPhotoImageType = .video
+    public var mediaType: CSPhotoImageType = .image
     public var CHECK_MAX_COUNT = 20
     public var horizontalCount: CGFloat = 3
     
@@ -108,6 +108,15 @@ extension CSPhotoGalleryViewController {
         } else if currentOffsetY + collectionView.frame.height < rect.origin.y + rect.height {
             collectionView.contentOffset.y = rect.origin.y + rect.height - collectionView.frame.height
         }
+    }
+    
+    func durationToText(time: TimeInterval) -> String {
+        let time = Date(timeIntervalSince1970: time)
+        
+        let dateFormater = DateFormatter()
+        dateFormater.dateFormat = "mm:ss"
+        
+        return dateFormater.string(from: time)
     }
 }
 
@@ -182,7 +191,7 @@ fileprivate extension CSPhotoGalleryViewController {
         PHPhotoLibrary.requestAuthorization() { status in
             switch status {
             case .authorized:
-                self.reloadCollectionView()
+                PhotoManager.sharedInstance.initPhotoManager()
             case .denied, .restricted:
                 break
             case .notDetermined:
@@ -208,6 +217,7 @@ extension CSPhotoGalleryViewController: UICollectionViewDataSource {
             cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CSPhotoGalleryCollectionViewCell", for: indexPath) as? CSPhotoGalleryCollectionViewCell
         case .video:
             cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CSPhotoGalleryVideoCollectionViewCell", for: indexPath) as? CSPhotoGalleryCollectionViewCell
+            cell?.setTime(time: durationToText(time: asset.duration))
         default:
             break
         }
@@ -242,7 +252,7 @@ extension CSPhotoGalleryViewController: UICollectionViewDelegate, UICollectionVi
             PhotoManager.sharedInstance.assetToImage(asset: asset, imageSize: CGSize(width: asset.pixelWidth, height: asset.pixelHeight)) { image in
                 //  Present photo viewer
                 let item = collectionView.layoutAttributesForItem(at: indexPath)
-                let vc = CSPhotoGalleryDetailViewController.sharedInstance
+                let vc = CSPhotoGalleryDetailViewController.instance
                 
                 var frame = item!.frame
                 frame.origin.y = frame.origin.y - collectionView.contentOffset.y + collectionView.frame.origin.y
@@ -289,7 +299,7 @@ extension CSPhotoGalleryViewController: UICollectionViewDelegate, UICollectionVi
 
 extension CSPhotoGalleryViewController: PHPhotoLibraryChangeObserver {
     public func photoLibraryDidChange(_ changeInstance: PHChange) {
-        guard let changes = changeInstance.changeDetails(for: PhotoManager.sharedInstance.getCurrentAsset()) else {
+        guard let currentAsset = PhotoManager.sharedInstance.getCurrentAsset(), let changes = changeInstance.changeDetails(for: currentAsset) else {
             return
         }
         

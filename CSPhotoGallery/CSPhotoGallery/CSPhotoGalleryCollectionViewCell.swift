@@ -12,12 +12,14 @@ class CSPhotoGalleryCollectionViewCell: UICollectionViewCell {
     
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet fileprivate weak var checkBtn: UIButton!
+    @IBOutlet fileprivate weak var timeLabel: UILabel?
     
     var indexPath: IndexPath?
     var representedAssetIdentifier: String?
     
     override func prepareForReuse() {
         imageView.image = nil
+        timeLabel?.text = nil
     }
 }
 
@@ -38,7 +40,11 @@ extension CSPhotoGalleryCollectionViewCell {
     }
     
     func setImage(image: UIImage?) {
-        self.imageView.image = image
+        imageView.image = image
+    }
+    
+    func setTime(time: String) {
+        timeLabel?.text = time
     }
 }
 
