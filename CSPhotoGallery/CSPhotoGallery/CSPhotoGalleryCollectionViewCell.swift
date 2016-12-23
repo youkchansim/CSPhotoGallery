@@ -11,18 +11,20 @@ import UIKit
 class CSPhotoGalleryCollectionViewCell: UICollectionViewCell {
     
     @IBOutlet weak var imageView: UIImageView!
-    @IBOutlet private weak var checkBtn: UIButton!
-    
-    @IBAction private func checkBtnAction(_ sender: Any) {
-        if indexPath != nil {
-            PhotoManager.sharedInstance.setSelectedIndexPath(identifier: representedAssetIdentifier!)
-            setButtonImage()
-        }
-    }
+    @IBOutlet fileprivate weak var checkBtn: UIButton!
+    @IBOutlet fileprivate weak var timeLabel: UILabel?
     
     var indexPath: IndexPath?
     var representedAssetIdentifier: String?
     
+    override func prepareForReuse() {
+        imageView.image = nil
+        timeLabel?.text = nil
+    }
+}
+
+//  MARK:- Extension
+extension CSPhotoGalleryCollectionViewCell {
     func setButtonImage() {
         DispatchQueue.main.async {
             if PhotoManager.sharedInstance.isSelectedIndexPath(identifier: self.representedAssetIdentifier!) {
@@ -38,6 +40,20 @@ class CSPhotoGalleryCollectionViewCell: UICollectionViewCell {
     }
     
     func setImage(image: UIImage?) {
-        self.imageView.image = image
+        imageView.image = image
+    }
+    
+    func setTime(time: String) {
+        timeLabel?.text = time
+    }
+}
+
+//  MARK:- IBAction
+extension CSPhotoGalleryCollectionViewCell {
+    @IBAction private func checkBtnAction(_ sender: Any) {
+        if indexPath != nil {
+            PhotoManager.sharedInstance.setSelectedIndexPath(identifier: representedAssetIdentifier!)
+            setButtonImage()
+        }
     }
 }

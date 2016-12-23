@@ -106,7 +106,7 @@ fileprivate extension UIViewControllerAnimatedTransitioning {
         let imageHeight = CGFloat(originImage.cgImage!.height)
         var scaleFactor: CGFloat = 1
         
-        if imageWidth > imageHeight {
+        if imageWidth >= imageHeight {
             scaleFactor = standardFrame.width / imageWidth
         } else {
             scaleFactor = standardFrame.height / imageHeight

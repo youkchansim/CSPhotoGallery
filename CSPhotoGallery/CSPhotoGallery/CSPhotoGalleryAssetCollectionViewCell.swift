@@ -12,10 +12,17 @@ class CSPhotoGalleryAssetCollectionViewCell: UITableViewCell {
     
     var indexPath: IndexPath?
     
-    @IBOutlet private weak var albumImageView: UIImageView!
+    @IBOutlet fileprivate weak var albumImageView: UIImageView!
     @IBOutlet weak var albumName: UILabel!
     @IBOutlet weak var albumAssetCount: UILabel!
     
+    override func prepareForReuse() {
+        albumImageView.image = nil
+    }
+}
+
+//  MARK:- Extension
+extension CSPhotoGalleryAssetCollectionViewCell {
     func setAlbumImage(image: UIImage?) {
         albumImageView.image = image
     }
