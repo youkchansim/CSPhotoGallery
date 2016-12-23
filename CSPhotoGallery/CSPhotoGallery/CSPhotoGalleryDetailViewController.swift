@@ -136,13 +136,7 @@ fileprivate extension CSPhotoGalleryDetailViewController {
         let presentingVC = presentingViewController as! CSPhotoGalleryViewController
         presentingVC.scrollRectToVisible(indexPath: currentIndexPath)
         
-        let asset = PhotoManager.sharedInstance.getCurrentCollectionAsset(at: currentIndexPath)
-        let size = CGSize(width: asset.pixelWidth, height: asset.pixelHeight)
-        
-        PhotoManager.sharedInstance.assetToImage(asset: asset, imageSize: size) { image in
-            self.currentImage = image
-            self.dismiss(animated: true, completion: nil)
-        }
+        self.dismiss(animated: true, completion: nil)
     }
 }
 
@@ -157,12 +151,12 @@ extension CSPhotoGalleryDetailViewController: UICollectionViewDataSource {
         let asset = PhotoManager.sharedInstance.getCurrentCollectionAsset(at: indexPath)
         
         cell.representedAssetIdentifier = asset.localIdentifier
-        cell.scrollView.zoomScale = 1.0
         
         let size = CGSize(width: asset.pixelWidth, height: asset.pixelHeight)
         PhotoManager.sharedInstance.setThumbnailImage(at: indexPath, thumbnailSize: size, isCliping: false) { image in
             if cell.representedAssetIdentifier == asset.localIdentifier {
                 cell.imageView.image = image
+                self.currentImage = image
             }
         }
         
@@ -173,14 +167,16 @@ extension CSPhotoGalleryDetailViewController: UICollectionViewDataSource {
 //  MARK:- UICollectionView Delegate
 extension CSPhotoGalleryDetailViewController: UICollectionViewDelegateFlowLayout {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        var visibleRect = CGRect()
-        
-        visibleRect.origin = collectionView.contentOffset
-        visibleRect.size = collectionView.bounds.size
-        
-        let visiblePoint = CGPoint(x: visibleRect.midX, y: visibleRect.midY)
-        if let visibleIndexPath: IndexPath = collectionView.indexPathForItem(at: visiblePoint) {
-            currentIndexPath = visibleIndexPath
+        if scrollView == collectionView {
+            var visibleRect = CGRect()
+            
+            visibleRect.origin = collectionView.contentOffset
+            visibleRect.size = collectionView.bounds.size
+            
+            let visiblePoint = CGPoint(x: visibleRect.midX, y: visibleRect.midY)
+            if let visibleIndexPath: IndexPath = collectionView.indexPathForItem(at: visiblePoint) {
+                currentIndexPath = visibleIndexPath
+            }
         }
     }
     

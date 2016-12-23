@@ -4,7 +4,6 @@
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -258,29 +257,25 @@
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="453"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fjJ-8k-Dh6">
-                                                    <rect key="frame" x="187" y="226.5" width="0.0" height="0.0"/>
+                                                <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" maximumZoomScale="5" translatesAutoresizingMaskIntoConstraints="NO" id="fjJ-8k-Dh6">
+                                                    <rect key="frame" x="0.0" y="0.0" width="375" height="453"/>
                                                     <subviews>
-                                                        <imageView clipsSubviews="YES" contentMode="scaleAspectFit" horizontalHuggingPriority="1000" verticalHuggingPriority="1000" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" translatesAutoresizingMaskIntoConstraints="NO" id="zfd-yd-KR8"/>
+                                                        <imageView clipsSubviews="YES" contentMode="scaleAspectFit" translatesAutoresizingMaskIntoConstraints="NO" id="zfd-yd-KR8">
+                                                            <rect key="frame" x="0.0" y="0.0" width="375" height="453"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="width" priority="900" id="n2h-Vv-8WZ"/>
+                                                                <constraint firstAttribute="height" priority="900" id="oHG-mW-ksj"/>
+                                                            </constraints>
+                                                        </imageView>
                                                     </subviews>
                                                     <constraints>
                                                         <constraint firstItem="zfd-yd-KR8" firstAttribute="top" secondItem="fjJ-8k-Dh6" secondAttribute="top" id="1ZG-lS-t9A"/>
                                                         <constraint firstItem="zfd-yd-KR8" firstAttribute="centerY" secondItem="fjJ-8k-Dh6" secondAttribute="centerY" id="2a7-J2-fL8"/>
                                                         <constraint firstItem="zfd-yd-KR8" firstAttribute="leading" secondItem="fjJ-8k-Dh6" secondAttribute="leading" id="4Wj-Hm-8e1"/>
                                                         <constraint firstItem="zfd-yd-KR8" firstAttribute="centerX" secondItem="fjJ-8k-Dh6" secondAttribute="centerX" id="8Fb-sq-Z5F"/>
-                                                        <constraint firstAttribute="height" priority="900" id="Oqp-jl-mTR"/>
                                                         <constraint firstAttribute="trailing" secondItem="zfd-yd-KR8" secondAttribute="trailing" id="nfZ-gt-xpT"/>
                                                         <constraint firstAttribute="bottom" secondItem="zfd-yd-KR8" secondAttribute="bottom" id="xQR-9L-cwk"/>
-                                                        <constraint firstAttribute="width" priority="900" id="xjP-gd-PIL"/>
                                                     </constraints>
-                                                    <userDefinedRuntimeAttributes>
-                                                        <userDefinedRuntimeAttribute type="number" keyPath="maximumZoomScale">
-                                                            <integer key="value" value="5"/>
-                                                        </userDefinedRuntimeAttribute>
-                                                        <userDefinedRuntimeAttribute type="number" keyPath="minimumZoomScale">
-                                                            <integer key="value" value="1"/>
-                                                        </userDefinedRuntimeAttribute>
-                                                    </userDefinedRuntimeAttributes>
                                                     <connections>
                                                         <outlet property="delegate" destination="7hl-YS-b0Z" id="oEu-6F-Bp4"/>
                                                     </connections>
@@ -288,12 +283,12 @@
                                             </subviews>
                                         </view>
                                         <constraints>
-                                            <constraint firstItem="fjJ-8k-Dh6" firstAttribute="top" relation="greaterThanOrEqual" secondItem="hfc-SG-QW5" secondAttribute="top" id="4Ij-2V-V7P"/>
+                                            <constraint firstItem="fjJ-8k-Dh6" firstAttribute="top" secondItem="hfc-SG-QW5" secondAttribute="top" id="8pD-wy-6G7"/>
                                             <constraint firstItem="fjJ-8k-Dh6" firstAttribute="centerY" secondItem="hfc-SG-QW5" secondAttribute="centerY" id="Aer-1V-8bA"/>
-                                            <constraint firstItem="fjJ-8k-Dh6" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="hfc-SG-QW5" secondAttribute="leading" id="LXp-Og-bMT"/>
-                                            <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="fjJ-8k-Dh6" secondAttribute="trailing" id="OD2-n8-fQu"/>
-                                            <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="fjJ-8k-Dh6" secondAttribute="bottom" id="Reh-mg-l7R"/>
+                                            <constraint firstItem="fjJ-8k-Dh6" firstAttribute="leading" secondItem="hfc-SG-QW5" secondAttribute="leading" id="M0u-on-85z"/>
+                                            <constraint firstAttribute="trailing" secondItem="fjJ-8k-Dh6" secondAttribute="trailing" id="QLt-hF-SZm"/>
                                             <constraint firstItem="fjJ-8k-Dh6" firstAttribute="centerX" secondItem="hfc-SG-QW5" secondAttribute="centerX" id="abu-Z8-z9j"/>
+                                            <constraint firstAttribute="bottom" secondItem="fjJ-8k-Dh6" secondAttribute="bottom" id="kx0-1r-QpR"/>
                                         </constraints>
                                         <connections>
                                             <outlet property="imageView" destination="zfd-yd-KR8" id="xTv-pR-Tem"/>

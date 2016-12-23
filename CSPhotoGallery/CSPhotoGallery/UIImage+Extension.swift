@@ -45,3 +45,24 @@ extension UIImage {
         return cropImage
     }
 }
+
+extension UIImage {
+    func getCGRectByFrame(standardFrame: CGRect) -> CGRect {
+        let imageWidth = CGFloat(self.cgImage!.width)
+        let imageHeight = CGFloat(self.cgImage!.height)
+        var scaleFactor: CGFloat = 1
+        
+        if imageWidth >= imageHeight {
+            scaleFactor = standardFrame.width / imageWidth
+        } else {
+            scaleFactor = standardFrame.height / imageHeight
+        }
+        
+        let width = imageWidth * scaleFactor
+        let height = imageHeight * scaleFactor
+        let x = (standardFrame.width - width) / 2
+        let y = (standardFrame.height - height) / 2 + standardFrame.origin.y
+        
+        return CGRect(origin: CGPoint(x: x, y: y), size: CGSize(width: width, height: height))
+    }
+}

@@ -25,6 +25,7 @@ class CSPhotoGalleryDetailCollectionViewCell: UICollectionViewCell {
     override func prepareForReuse() {
         representedAssetIdentifier = nil
         imageView.image = nil
+        scrollView.setZoomScale(1.0, animated: true)
     }
 }
 
@@ -32,9 +33,7 @@ class CSPhotoGalleryDetailCollectionViewCell: UICollectionViewCell {
 extension CSPhotoGalleryDetailCollectionViewCell {
     func doubleTap(gesture: UIGestureRecognizer) {
         if scrollView.zoomScale > 1.0 {
-            UIView.animate(withDuration: 0.3) {
-                self.scrollView.zoomScale = 1.0
-            }
+            scrollView.setZoomScale(1.0, animated: true)
         } else {
             let scale: CGFloat = 5.0
             let point = gesture.location(in: imageView)
