@@ -105,9 +105,9 @@ extension CSPhotoGalleryAssetCollectionViewController: UITableViewDataSource {
         cell.albumAssetCount.text = "\(PhotoManager.sharedInstance.getPHAssetCollectionCount(collection: collection!))"
         
         let asset = PhotoManager.sharedInstance.getAssetsInPHAssetCollection(collection: collection!).object(at: 0)
-        let size = cell.bounds.width * 5
+        let size = cell.bounds.width * 3
         
-        PhotoManager.sharedInstance.assetToImage(asset: asset, imageSize: CGSize(width: size, height: size)) { image in
+        PhotoManager.sharedInstance.assetToImage(asset: asset, imageSize: CGSize(width: size, height: size), isCliping: true) { image in
             if cell.indexPath == indexPath {
                 cell.setAlbumImage(image: image)
             }

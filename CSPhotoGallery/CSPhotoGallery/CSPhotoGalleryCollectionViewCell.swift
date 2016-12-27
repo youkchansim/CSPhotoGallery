@@ -16,6 +16,8 @@ class CSPhotoGalleryCollectionViewCell: UICollectionViewCell {
     
     var indexPath: IndexPath?
     var representedAssetIdentifier: String?
+    var checkImage: UIImage?
+    var unCheckImage: UIImage?
     
     override func prepareForReuse() {
         imageView.image = nil
@@ -28,9 +30,9 @@ extension CSPhotoGalleryCollectionViewCell {
     func setButtonImage() {
         DispatchQueue.main.async {
             if PhotoManager.sharedInstance.isSelectedIndexPath(identifier: self.representedAssetIdentifier!) {
-                self.checkBtn.setImage(UIImage(named: "check_select"), for: .normal)
+                self.checkBtn.setImage(self.checkImage, for: .normal)
             } else {
-                self.checkBtn.setImage(UIImage(named: "check_default"), for: .normal)
+                self.checkBtn.setImage(self.unCheckImage, for: .normal)
             }
         }
     }

@@ -17,7 +17,6 @@ public class CSPhotoGalleryViewController: UIViewController {
         return storyBoard.instantiateViewController(withIdentifier: identifier) as! CSPhotoGalleryViewController
     }
     
-    @IBOutlet fileprivate weak var backBtn: UIButton!
     @IBOutlet fileprivate weak var collectionName: UILabel! {
         didSet {
             let gesture = UITapGestureRecognizer(target: self, action: #selector(collectionNameTap(_:)))
@@ -27,9 +26,28 @@ public class CSPhotoGalleryViewController: UIViewController {
     }
     @IBOutlet fileprivate weak var collectionNameArrow: UILabel!
     @IBOutlet fileprivate weak var checkCount: UILabel!
-    @IBOutlet fileprivate weak var checkBtn: UIButton!
+    @IBOutlet fileprivate weak var checkBtn: UIButton! {
+        didSet {
+            if let title = okButtonTitle {
+                checkBtn.setTitle(title, for: .normal)
+            }
+        }
+    }
+    
+    @IBOutlet fileprivate weak var backBtn: UIButton! {
+        didSet {
+            if let image = backButtonImage {
+                backBtn.setImage(image, for: .normal)
+            }
+        }
+    }
     
     @IBOutlet fileprivate weak var collectionView: UICollectionView!
+    
+    public var delegate: CSPhotoGalleryDelegate?
+    public var mediaType: CSPhotoImageType = .image
+    public var CHECK_MAX_COUNT = 20
+    public var horizontalCount: CGFloat = 3
     
     fileprivate var assetCollectionViewController = CSPhotoGalleryAssetCollectionViewController.instance
     fileprivate var thumbnailSize: CGSize = CGSize.zero
@@ -37,10 +55,11 @@ public class CSPhotoGalleryViewController: UIViewController {
     fileprivate var CSCollectionObservationContext = CSObservation()
     fileprivate var transitionDelegate: CSPhotoViewerTransition = CSPhotoViewerTransition()
     
-    public var delegate: CSPhotoGalleryDelegate?
-    public var mediaType: CSPhotoImageType = .image
-    public var CHECK_MAX_COUNT = 20
-    public var horizontalCount: CGFloat = 3
+    var checkImage: UIImage? = UIImage(named: "check_select")
+    var unCheckImage: UIImage? = UIImage(named: "check_default")
+    var backgroundColor: UIColor?
+    var backButtonImage: UIImage?
+    var okButtonTitle: String?
     
     override public func viewDidLoad() {
         super.viewDidLoad()
@@ -221,26 +240,23 @@ extension CSPhotoGalleryViewController: UICollectionViewDataSource {
             cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CSPhotoGalleryVideoCollectionViewCell", for: indexPath) as? CSPhotoGalleryCollectionViewCell
             cell?.setTime(time: durationToText(time: asset.duration))
         default:
-            break
+            return UICollectionViewCell()
         }
         
         cell?.indexPath = indexPath
-        cell?.representedAssetIdentifier = PhotoManager.sharedInstance.getLocalIdentifier(at: indexPath)
+        cell?.representedAssetIdentifier = asset.localIdentifier
+        cell?.checkImage = checkImage
+        cell?.unCheckImage = unCheckImage
         
         cell?.setPlaceHolderImage(image: nil)
-        cell?.setButtonImage()
         
-        PhotoManager.sharedInstance.setThumbnailImage(at: indexPath, thumbnailSize: thumbnailSize) { image in
-            if cell?.representedAssetIdentifier == PhotoManager.sharedInstance.getLocalIdentifier(at: indexPath) {
+        PhotoManager.sharedInstance.setThumbnailImage(at: indexPath, thumbnailSize: thumbnailSize, isCliping: true) { image in
+            if cell?.representedAssetIdentifier == asset.localIdentifier {
                 cell?.setImage(image: image)
             }
         }
         
-        if let collectionViewCell = cell {
-            return collectionViewCell
-        } else {
-            return UICollectionViewCell()
-        }
+        return cell!
     }
 }
 
@@ -251,7 +267,7 @@ extension CSPhotoGalleryViewController: UICollectionViewDelegate, UICollectionVi
         let asset = PhotoManager.sharedInstance.getCurrentCollectionAsset(at: indexPath)
         
         if asset.mediaType == .image {
-            PhotoManager.sharedInstance.assetToImage(asset: asset, imageSize: CGSize(width: asset.pixelWidth, height: asset.pixelHeight)) { image in
+            PhotoManager.sharedInstance.assetToImage(asset: asset, imageSize: CGSize(width: asset.pixelWidth, height: asset.pixelHeight), isCliping: false) { image in
                 //  Present photo viewer
                 let item = collectionView.layoutAttributesForItem(at: indexPath)
                 let vc = CSPhotoGalleryDetailViewController.instance
@@ -287,7 +303,7 @@ extension CSPhotoGalleryViewController: UICollectionViewDelegate, UICollectionVi
                                                     }
                                                 }
                                             } else {
-                                                print("This is not a URL asset. Cannot play")
+                                                NSLog("This is not a URL asset. Cannot play")
                                             }
             })
         }

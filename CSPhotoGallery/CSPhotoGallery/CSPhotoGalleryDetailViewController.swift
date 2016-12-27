@@ -14,28 +14,44 @@ class CSPhotoGalleryDetailViewController: UIViewController {
         return storyBoard.instantiateViewController(withIdentifier: identifier) as! CSPhotoGalleryDetailViewController
     }
 
-    @IBOutlet weak var currentIndexLabel: UILabel? {
+    @IBOutlet fileprivate weak var currentIndexLabel: UILabel? {
         didSet {
             updateCurrentIndexLabel()
         }
     }
     
-    @IBOutlet weak var currentCollectionCountLabel: UILabel? {
+    @IBOutlet fileprivate weak var currentCollectionCountLabel: UILabel? {
         didSet {
             updateCurrentCollectionAssetCount()
         }
     }
     
-    @IBOutlet weak var checkCountLabel: UILabel? {
+    @IBOutlet fileprivate weak var checkCountLabel: UILabel? {
         didSet {
             updateCurrentSelectedCount()
         }
     }
     
     @IBOutlet weak var collectionView: UICollectionView!
-    @IBOutlet weak var checkBtn: UIButton?
+    @IBOutlet fileprivate weak var checkBtn: UIButton!
+    @IBOutlet weak var okBtn: UIButton! {
+        didSet {
+            if let title = okButtonTitle {
+                checkBtn.setTitle(title, for: .normal)
+            }
+        }
+    }
+    
+    @IBOutlet fileprivate weak var backBtn: UIButton! {
+        didSet {
+            if let image = backButtonImage {
+                backBtn.setImage(image, for: .normal)
+            }
+        }
+    }
     
     var delegate: CSPhotoGalleryDelegate?
+    fileprivate var prevIndexPath: IndexPath?
     var currentIndexPath: IndexPath = IndexPath(item: 0, section: 0) {
         didSet {
             if PhotoManager.sharedInstance.assetsCount > 0 {
@@ -44,9 +60,13 @@ class CSPhotoGalleryDetailViewController: UIViewController {
             }
         }
     }
-    fileprivate var prevIndexPath: IndexPath?
     
     var currentImage: UIImage?
+    var checkImage: UIImage? = UIImage(named: "check_select")
+    var unCheckImage: UIImage? = UIImage(named: "check_default")
+    var backgroundColor: UIColor?
+    var backButtonImage: UIImage?
+    var okButtonTitle: String?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -119,9 +139,9 @@ fileprivate extension CSPhotoGalleryDetailViewController {
         DispatchQueue.main.async {
             let identifier = PhotoManager.sharedInstance.getLocalIdentifier(at: self.currentIndexPath)
             if PhotoManager.sharedInstance.isSelectedIndexPath(identifier: identifier) {
-                self.checkBtn?.setImage(UIImage(named: "check_select"), for: .normal)
+                self.checkBtn?.setImage(self.checkImage, for: .normal)
             } else {
-                self.checkBtn?.setImage(UIImage(named: "check_default"), for: .normal)
+                self.checkBtn?.setImage(self.unCheckImage, for: .normal)
             }
         }
     }
@@ -142,7 +162,7 @@ fileprivate extension CSPhotoGalleryDetailViewController {
         let asset = PhotoManager.sharedInstance.getCurrentCollectionAsset(at: currentIndexPath)
         let size = CGSize(width: asset.pixelWidth, height: asset.pixelHeight)
         
-        PhotoManager.sharedInstance.assetToImage(asset: asset, imageSize: size) { image in
+        PhotoManager.sharedInstance.assetToImage(asset: asset, imageSize: size, isCliping: false) { image in
             self.currentImage = image
             self.dismiss(animated: true, completion: nil)
         }

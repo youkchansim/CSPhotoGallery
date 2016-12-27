@@ -139,27 +139,19 @@ extension PhotoManager {
     }
     
     //  Set ThumbnailImage
-    func setThumbnailImage(at indexPath: IndexPath, thumbnailSize: CGSize, isCliping: Bool = true,completionHandler: ((UIImage)->())?) {
+    func setThumbnailImage(at indexPath: IndexPath, thumbnailSize: CGSize, isCliping: Bool, completionHandler: ((UIImage)->())?) {
         let asset = getCurrentCollectionAsset(at: indexPath)
-        if isCliping {
-            assetToClipImage(asset: asset, imageSize: thumbnailSize, completionHandler: completionHandler)
-        } else {
-            assetToImage(asset: asset, imageSize: thumbnailSize, completionHandler: completionHandler)
-        }
+        assetToImage(asset: asset, imageSize: thumbnailSize, isCliping: isCliping,completionHandler: completionHandler)
     }
     
-    func assetToClipImage(asset: PHAsset, imageSize: CGSize, completionHandler: ((UIImage)->())?) {
+    func assetToImage(asset: PHAsset, imageSize: CGSize, isCliping: Bool, completionHandler: ((UIImage)->())?) {
         imageManager.requestImage(for: asset, targetSize: imageSize, contentMode: .aspectFill, options: imageRequestOptions) { image, _ in
             if let thumbnameImage = image {
-                completionHandler?(thumbnameImage.clipRect)
-            }
-        }
-    }
-    
-    func assetToImage(asset: PHAsset, imageSize: CGSize, completionHandler: ((UIImage)->())?) {
-        imageManager.requestImage(for: asset, targetSize: imageSize, contentMode: .aspectFill, options: imageRequestOptions) { image, _ in
-            if let thumbnameImage = image {
-                completionHandler?(thumbnameImage)
+                if isCliping {
+                    completionHandler?(thumbnameImage.clipRect)
+                } else {
+                    completionHandler?(thumbnameImage)
+                }
             }
         }
     }

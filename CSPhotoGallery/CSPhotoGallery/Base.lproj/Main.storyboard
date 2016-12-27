@@ -385,11 +385,13 @@
                     </view>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
                     <connections>
+                        <outlet property="backBtn" destination="PFw-iY-HLf" id="oTp-t9-MKu"/>
                         <outlet property="checkBtn" destination="5Bv-EG-gku" id="HtT-aO-cod"/>
                         <outlet property="checkCountLabel" destination="fU5-fq-yNx" id="Oyu-X0-wtD"/>
                         <outlet property="collectionView" destination="dYb-ql-EmG" id="gE8-63-jvk"/>
                         <outlet property="currentCollectionCountLabel" destination="CAT-AA-MsG" id="fI0-3Z-qAK"/>
                         <outlet property="currentIndexLabel" destination="wAu-Ib-s6x" id="akY-EB-53k"/>
+                        <outlet property="okBtn" destination="aq9-hl-Nt9" id="n0P-Gj-UjT"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ifX-UV-9Mj" userLabel="First Responder" sceneMemberID="firstResponder"/>
