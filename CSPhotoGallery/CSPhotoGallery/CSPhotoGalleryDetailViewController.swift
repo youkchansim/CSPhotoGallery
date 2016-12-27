@@ -191,12 +191,6 @@ extension CSPhotoGalleryDetailViewController: UICollectionViewDelegateFlowLayout
         }
     }
     
-    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        if scrollView == collectionView {
-            
-        }
-    }
-    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return collectionView.frame.size
     }
@@ -204,8 +198,8 @@ extension CSPhotoGalleryDetailViewController: UICollectionViewDelegateFlowLayout
 
 //  MARK:- UIScrollView Delegate
 extension CSPhotoGalleryDetailViewController: UIScrollViewDelegate {
-    func viewForZooming(in scrollView: UIScrollView) -> UIView? {
-        let cell = collectionView.cellForItem(at: currentIndexPath) as? CSPhotoGalleryDetailCollectionViewCell
-        return cell?.imageView
-    }
+//    func viewForZooming(in scrollView: UIScrollView) -> UIView? {
+//        let cell = collectionView.cellForItem(at: currentIndexPath) as? CSPhotoGalleryDetailCollectionViewCell
+//        return cell?.imageView
+//    }
 }

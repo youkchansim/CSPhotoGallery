@@ -277,9 +277,6 @@
                                                         <constraint firstAttribute="trailing" secondItem="zfd-yd-KR8" secondAttribute="trailing" id="nfZ-gt-xpT"/>
                                                         <constraint firstAttribute="bottom" secondItem="zfd-yd-KR8" secondAttribute="bottom" id="xQR-9L-cwk"/>
                                                     </constraints>
-                                                    <connections>
-                                                        <outlet property="delegate" destination="7hl-YS-b0Z" id="oEu-6F-Bp4"/>
-                                                    </connections>
                                                 </scrollView>
                                             </subviews>
                                         </view>

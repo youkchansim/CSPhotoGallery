@@ -15,10 +15,10 @@ class CSPhotoGalleryDetailCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var scrollView: UIScrollView! {
         didSet {
-            let doubleTapGesture = UITapGestureRecognizer(target: self, action: #selector(doubleTap))
-            doubleTapGesture.numberOfTapsRequired = 2
-            doubleTapGesture.delaysTouchesBegan = true
-            scrollView.addGestureRecognizer(doubleTapGesture)
+//            let doubleTapGesture = UITapGestureRecognizer(target: self, action: #selector(doubleTap))
+//            doubleTapGesture.numberOfTapsRequired = 2
+//            doubleTapGesture.delaysTouchesBegan = true
+//            scrollView.addGestureRecognizer(doubleTapGesture)
         }
     }
     
