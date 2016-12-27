@@ -25,7 +25,6 @@ class CSPhotoGalleryDetailCollectionViewCell: UICollectionViewCell {
     override func prepareForReuse() {
         representedAssetIdentifier = nil
         imageView.image = nil
-        scrollView.setZoomScale(1.0, animated: true)
     }
 }
 

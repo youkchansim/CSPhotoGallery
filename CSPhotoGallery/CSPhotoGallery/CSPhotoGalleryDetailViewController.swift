@@ -44,6 +44,7 @@ class CSPhotoGalleryDetailViewController: UIViewController {
             }
         }
     }
+    fileprivate var prevIndexPath: IndexPath?
     
     var currentImage: UIImage?
     
@@ -182,8 +183,17 @@ extension CSPhotoGalleryDetailViewController: UICollectionViewDelegateFlowLayout
             
             let visiblePoint = CGPoint(x: visibleRect.midX, y: visibleRect.midY)
             if let visibleIndexPath: IndexPath = collectionView.indexPathForItem(at: visiblePoint) {
-                currentIndexPath = visibleIndexPath
+                if currentIndexPath != visibleIndexPath {
+                    prevIndexPath = currentIndexPath
+                    currentIndexPath = visibleIndexPath
+                }
             }
+        }
+    }
+    
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        if scrollView == collectionView {
+            
         }
     }
     
