@@ -25,6 +25,7 @@ public class CSPhotoGalleryViewController: UIViewController {
             collectionName.isUserInteractionEnabled = true
         }
     }
+    @IBOutlet fileprivate weak var collectionNameArrow: UILabel!
     @IBOutlet fileprivate weak var checkCount: UILabel!
     @IBOutlet fileprivate weak var checkBtn: UIButton!
     
@@ -73,6 +74,7 @@ public class CSPhotoGalleryViewController: UIViewController {
 extension CSPhotoGalleryViewController {
     func collectionNameTap(_ sender: UITapGestureRecognizer) {
         assetCollectionViewController.isHidden = !assetCollectionViewController.isHidden
+        collectionNameArrow.text = assetCollectionViewController.isHidden ? "▼" : "▲"
     }
     
     func reloadCollectionView() {

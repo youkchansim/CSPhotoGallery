@@ -126,7 +126,9 @@ fileprivate extension CSPhotoGalleryDetailViewController {
     }
     
     func scrollToCurrentIndexPath() {
-        collectionView.scrollToItem(at: currentIndexPath, at: .left, animated: false)
+        DispatchQueue.main.async {
+            self.collectionView.scrollToItem(at: self.currentIndexPath, at: .left, animated: false)
+        }
     }
 }
 
@@ -136,7 +138,13 @@ fileprivate extension CSPhotoGalleryDetailViewController {
         let presentingVC = presentingViewController as! CSPhotoGalleryViewController
         presentingVC.scrollRectToVisible(indexPath: currentIndexPath)
         
-        self.dismiss(animated: true, completion: nil)
+        let asset = PhotoManager.sharedInstance.getCurrentCollectionAsset(at: currentIndexPath)
+        let size = CGSize(width: asset.pixelWidth, height: asset.pixelHeight)
+        
+        PhotoManager.sharedInstance.assetToImage(asset: asset, imageSize: size) { image in
+            self.currentImage = image
+            self.dismiss(animated: true, completion: nil)
+        }
     }
 }
 
@@ -156,7 +164,6 @@ extension CSPhotoGalleryDetailViewController: UICollectionViewDataSource {
         PhotoManager.sharedInstance.setThumbnailImage(at: indexPath, thumbnailSize: size, isCliping: false) { image in
             if cell.representedAssetIdentifier == asset.localIdentifier {
                 cell.imageView.image = image
-                self.currentImage = image
             }
         }
         

@@ -221,6 +221,7 @@
                         <outlet property="checkBtn" destination="IJe-xQ-ESv" id="WWC-l1-1UY"/>
                         <outlet property="checkCount" destination="xtq-En-WSh" id="5uH-lM-kVk"/>
                         <outlet property="collectionName" destination="TVF-0b-dIe" id="0KO-KT-OcF"/>
+                        <outlet property="collectionNameArrow" destination="mKw-Fu-VIK" id="q3Q-Df-a1u"/>
                         <outlet property="collectionView" destination="Aj0-cd-hX8" id="263-w8-TVE"/>
                     </connections>
                 </viewController>
@@ -241,7 +242,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="dYb-ql-EmG">
-                                <rect key="frame" x="0.0" y="75" width="375" height="527"/>
+                                <rect key="frame" x="0.0" y="65.5" width="375" height="536.5"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="hQ3-Cc-qif">
                                     <size key="itemSize" width="375" height="453"/>
@@ -251,7 +252,7 @@
                                 </collectionViewFlowLayout>
                                 <cells>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" restorationIdentifier="CSPhotoGalleryDetailCollectionViewCell" reuseIdentifier="CSPhotoGalleryDetailCollectionViewCell" id="hfc-SG-QW5" customClass="CSPhotoGalleryDetailCollectionViewCell" customModule="CSPhotoGallery" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="37" width="375" height="453"/>
+                                        <rect key="frame" x="0.0" y="42" width="375" height="453"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="453"/>
@@ -363,6 +364,7 @@
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="dYb-ql-EmG" firstAttribute="top" secondItem="PFw-iY-HLf" secondAttribute="bottom" constant="2.5" id="0Kv-rO-i3z"/>
                             <constraint firstItem="jxx-Dp-wfE" firstAttribute="centerY" secondItem="PFw-iY-HLf" secondAttribute="centerY" id="68i-M0-oHC"/>
                             <constraint firstItem="fU5-fq-yNx" firstAttribute="centerY" secondItem="PFw-iY-HLf" secondAttribute="centerY" id="87Z-R7-cBR"/>
                             <constraint firstItem="PFw-iY-HLf" firstAttribute="top" secondItem="LIu-NN-wh2" secondAttribute="bottom" constant="2.5" id="DMP-iz-yCj"/>
@@ -380,7 +382,6 @@
                             <constraint firstItem="CAT-AA-MsG" firstAttribute="leading" secondItem="jxx-Dp-wfE" secondAttribute="trailing" constant="5" id="sAg-8b-0dk"/>
                             <constraint firstItem="jxx-Dp-wfE" firstAttribute="centerY" secondItem="wAu-Ib-s6x" secondAttribute="centerY" id="saL-Bc-AhN"/>
                             <constraint firstAttribute="trailing" secondItem="dYb-ql-EmG" secondAttribute="trailing" id="v84-oN-OSQ"/>
-                            <constraint firstItem="dYb-ql-EmG" firstAttribute="top" secondItem="aq9-hl-Nt9" secondAttribute="bottom" constant="10" id="vqp-ky-nZg"/>
                             <constraint firstItem="PFw-iY-HLf" firstAttribute="leading" secondItem="6xF-WQ-2lH" secondAttribute="leading" id="wYC-GK-P7P"/>
                             <constraint firstItem="jxx-Dp-wfE" firstAttribute="leading" secondItem="wAu-Ib-s6x" secondAttribute="trailing" constant="5" id="xfL-Ep-ai4"/>
                         </constraints>
