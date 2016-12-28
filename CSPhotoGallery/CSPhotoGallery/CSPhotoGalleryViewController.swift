@@ -28,7 +28,7 @@ public class CSPhotoGalleryViewController: UIViewController {
     @IBOutlet fileprivate weak var checkCount: UILabel!
     @IBOutlet fileprivate weak var checkBtn: UIButton! {
         didSet {
-            if let title = okButtonTitle {
+            if let title = CSPhotoDesignManager.instance.photoGalleryOKButtonTitle {
                 checkBtn.setTitle(title, for: .normal)
             }
         }
@@ -36,7 +36,7 @@ public class CSPhotoGalleryViewController: UIViewController {
     
     @IBOutlet fileprivate weak var backBtn: UIButton! {
         didSet {
-            if let image = backButtonImage {
+            if let image = CSPhotoDesignManager.instance.photoGalleryBackButtonImage {
                 backBtn.setImage(image, for: .normal)
             }
         }
@@ -55,11 +55,8 @@ public class CSPhotoGalleryViewController: UIViewController {
     fileprivate var CSCollectionObservationContext = CSObservation()
     fileprivate var transitionDelegate: CSPhotoViewerTransition = CSPhotoViewerTransition()
     
-    var checkImage: UIImage? = UIImage(named: "check_select")
-    var unCheckImage: UIImage? = UIImage(named: "check_default")
-    var backgroundColor: UIColor?
-    var backButtonImage: UIImage?
-    var okButtonTitle: String?
+    var checkImage: UIImage? = CSPhotoDesignManager.instance.photoGalleryCheckImage ?? UIImage(named: "check_select")
+    var unCheckImage: UIImage? = CSPhotoDesignManager.instance.photoGalleryUnCheckImage ?? UIImage(named: "check_default")
     
     override public func viewDidLoad() {
         super.viewDidLoad()

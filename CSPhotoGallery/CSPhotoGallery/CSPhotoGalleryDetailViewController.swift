@@ -36,15 +36,15 @@ class CSPhotoGalleryDetailViewController: UIViewController {
     @IBOutlet fileprivate weak var checkBtn: UIButton!
     @IBOutlet weak var okBtn: UIButton! {
         didSet {
-            if let title = okButtonTitle {
-                checkBtn.setTitle(title, for: .normal)
+            if let title = CSPhotoDesignManager.instance.photoDetailOKButtonTitle {
+                okBtn.setTitle(title, for: .normal)
             }
         }
     }
     
     @IBOutlet fileprivate weak var backBtn: UIButton! {
         didSet {
-            if let image = backButtonImage {
+            if let image = CSPhotoDesignManager.instance.photoDetailBackButtonImage {
                 backBtn.setImage(image, for: .normal)
             }
         }
@@ -62,11 +62,8 @@ class CSPhotoGalleryDetailViewController: UIViewController {
     }
     
     var currentImage: UIImage?
-    var checkImage: UIImage? = UIImage(named: "check_select")
-    var unCheckImage: UIImage? = UIImage(named: "check_default")
-    var backgroundColor: UIColor?
-    var backButtonImage: UIImage?
-    var okButtonTitle: String?
+    var checkImage: UIImage? = CSPhotoDesignManager.instance.photoDetailCheckImage ?? UIImage(named: "check_select")
+    var unCheckImage: UIImage? = CSPhotoDesignManager.instance.photoDetailUnCheckImage ?? UIImage(named: "check_default")
     
     override func viewDidLoad() {
         super.viewDidLoad()

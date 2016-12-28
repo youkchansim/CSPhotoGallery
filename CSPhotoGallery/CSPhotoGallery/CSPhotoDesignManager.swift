@@ -12,56 +12,21 @@ import UIKit
 public class CSPhotoDesignManager {
     public static var instance: CSPhotoDesignManager = CSPhotoDesignManager()
     
-    private let photoGalleryViewController = CSPhotoGalleryViewController.instance
-    private let photoDetailViewController = CSPhotoGalleryDetailViewController.instance
-    
     //  Photo collection view
-    public var photoGalleryBackButtonImage: UIImage? {
-        didSet {
-            photoGalleryViewController.backButtonImage = photoGalleryBackButtonImage
-        }
-    }
+    public var photoGalleryBackButtonImage: UIImage?
     
-    public var photoGalleryOKButtonTitle: String? {
-        didSet {
-            photoGalleryViewController.okButtonTitle = photoGalleryOKButtonTitle
-        }
-    }
+    public var photoGalleryOKButtonTitle: String?
     
-    public var photoGalleryCheckImage: UIImage? {
-        didSet {
-            photoGalleryViewController.checkImage = photoGalleryCheckImage
-        }
-    }
+    public var photoGalleryCheckImage: UIImage?
     
-    public var photoGalleryUnCheckImage: UIImage? {
-        didSet {
-            photoGalleryViewController.unCheckImage = photoGalleryUnCheckImage
-        }
-    }
+    public var photoGalleryUnCheckImage: UIImage?
     
     //  Photo detail view
-    public var photoDetailnBackButtonImage: UIImage? {
-        didSet {
-            photoDetailViewController.backButtonImage = photoDetailnBackButtonImage
-        }
-    }
+    public var photoDetailBackButtonImage: UIImage?
     
-    public var photoDetailOKButtonTitle: String? {
-        didSet {
-            photoDetailViewController.okButtonTitle = photoDetailOKButtonTitle
-        }
-    }
+    public var photoDetailOKButtonTitle: String?
     
-    public var photoDetailCheckImage: UIImage? {
-        didSet {
-            photoDetailViewController.checkImage = photoDetailCheckImage
-        }
-    }
+    public var photoDetailCheckImage: UIImage?
     
-    public var photoDetailUnCheckImage: UIImage? {
-        didSet {
-            photoDetailViewController.unCheckImage = photoDetailUnCheckImage
-        }
-    }
+    public var photoDetailUnCheckImage: UIImage?
 }
