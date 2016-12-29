@@ -11,7 +11,7 @@ import Photos
 
 class CSPhotoGalleryAssetCollectionViewController: UIViewController {
     static var instance: CSPhotoGalleryAssetCollectionViewController {
-        let storyBoard = UIStoryboard.init(name: "CSPhotoGallery", bundle: nil)
+        let storyBoard = UIStoryboard.init(name: "CSPhotoGallery", bundle: Bundle(identifier: "CSPhotoGallery"))
         return storyBoard.instantiateViewController(withIdentifier: identifier) as! CSPhotoGalleryAssetCollectionViewController
     }
     

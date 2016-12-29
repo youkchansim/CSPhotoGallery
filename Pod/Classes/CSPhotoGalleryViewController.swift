@@ -13,7 +13,7 @@ typealias CSObservation = UInt8
 
 public class CSPhotoGalleryViewController: UIViewController {
     public static var instance: CSPhotoGalleryViewController {
-        let storyBoard = UIStoryboard.init(name: "CSPhotoGallery", bundle: nil)
+        let storyBoard = UIStoryboard.init(name: "CSPhotoGallery", bundle: Bundle(identifier: "CSPhotoGallery"))
         return storyBoard.instantiateViewController(withIdentifier: identifier) as! CSPhotoGalleryViewController
     }
     

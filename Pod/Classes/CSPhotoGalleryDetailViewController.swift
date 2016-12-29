@@ -10,7 +10,7 @@ import UIKit
 
 class CSPhotoGalleryDetailViewController: UIViewController {
     static var instance: CSPhotoGalleryDetailViewController {
-        let storyBoard = UIStoryboard.init(name: "CSPhotoGallery", bundle: nil)
+        let storyBoard = UIStoryboard.init(name: "CSPhotoGallery", bundle: Bundle(identifier: "CSPhotoGallery"))
         return storyBoard.instantiateViewController(withIdentifier: identifier) as! CSPhotoGalleryDetailViewController
     }
 
