@@ -16,7 +16,7 @@ enum Section: Int {
     static let count = 2
 }
 
-public enum CSPhotoImageType {
+enum CSPhotoImageType {
     case image
     case video
     
