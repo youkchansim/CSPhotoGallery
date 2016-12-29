@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'CSPhotoGallery'
-  s.version          = '0.5.6'
+  s.version          = '0.5.7'
   s.summary          = 'A simple and elegant Photo gallery'
 
 # This description is used to generate tags and improve search results.
@@ -30,7 +30,7 @@ Pod::Spec.new do |s|
 
   s.source_files = 'Pod/Classes/**/*.*'
   
-  s.resource_bundles = {'CSPhotoGallery' => ['Pod/Assets/**/*.*']}
+  s.resource_bundles = {'CSPhotoGallery' => ['Pod/Assets/**/*.{xcassets}']}
 
   # s.public_header_files = 'Pod/Classes/**/*.h'
   # s.frameworks = 'UIKit', 'MapKit'
