@@ -156,8 +156,8 @@ fileprivate extension CSPhotoGalleryDetailViewController {
 //  MARK:- Extension
 fileprivate extension CSPhotoGalleryDetailViewController {
     func dismiss() {
-        let presentingVC = presentingViewController as! CSPhotoGalleryViewController
-        presentingVC.scrollRectToVisible(indexPath: currentIndexPath)
+        let parentVC = parent as! CSPhotoGalleryViewController
+        parentVC.scrollRectToVisible(indexPath: currentIndexPath)
         
         let asset = PhotoManager.sharedInstance.getCurrentCollectionAsset(at: currentIndexPath)
         let size = CGSize(width: asset.pixelWidth, height: asset.pixelHeight)
