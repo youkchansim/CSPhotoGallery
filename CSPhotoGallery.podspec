@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'CSPhotoGallery'
-  s.version          = '0.5.7'
+  s.version          = '0.5.8'
   s.summary          = 'A simple and elegant Photo gallery'
 
 # This description is used to generate tags and improve search results.
@@ -29,8 +29,8 @@ Pod::Spec.new do |s|
   s.ios.deployment_target = '9.0'
 
   s.source_files = 'Pod/Classes/**/*.*'
-  s.resource_bundles = {'CSPhotoGallery' => ['Pod/Assets/**/*.{storyboard, xcassets,plist}']}
-
+  s.resource_bundles = {'CSPhotoGallery' => ['Pod/Assets/**/*.{imageset,png,json,storyboard, xcassets}']}
+  s.resources = 'Pod/**/*.plist'
   # s.public_header_files = 'Pod/Classes/**/*.h'
   # s.frameworks = 'UIKit', 'MapKit'
   # s.dependency 'AFNetworking', '~> 2.3'
