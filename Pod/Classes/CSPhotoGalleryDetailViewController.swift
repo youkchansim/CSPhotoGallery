@@ -10,8 +10,9 @@ import UIKit
 
 class CSPhotoGalleryDetailViewController: UIViewController {
     static var instance: CSPhotoGalleryDetailViewController {
-        let bundlePath = Bundle.main.path(forResource: "CSPhotoGallery", ofType: "bundle")
-        let bundle = Bundle(path: bundlePath!)
+        let podBundle = Bundle(for: CSPhotoGalleryViewController.self)
+        let bundleURL = podBundle.url(forResource: "CSPhotoGallery", withExtension: "bundle")
+        let bundle = Bundle(url: bundleURL!)
         let storyBoard = UIStoryboard.init(name: "CSPhotoGallery", bundle: bundle)
         return storyBoard.instantiateViewController(withIdentifier: identifier) as! CSPhotoGalleryDetailViewController
     }
