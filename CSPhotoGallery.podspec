@@ -29,8 +29,7 @@ Pod::Spec.new do |s|
   s.ios.deployment_target = '9.0'
 
   s.source_files = 'Pod/Classes/**/*.*'
-  
-  s.resource_bundles = {'CSPhotoGallery' => ['Pod/Assets/**/*.{xcassets}']}
+  s.resource_bundles = {'CSPhotoGallery' => ['Pod/Assets/**/*.{storyboard, xcassets,plist}']}
 
   # s.public_header_files = 'Pod/Classes/**/*.h'
   # s.frameworks = 'UIKit', 'MapKit'
