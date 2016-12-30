@@ -83,7 +83,7 @@ class CSPhotoGalleryDetailViewController: UIViewController {
 //  IBAction
 private extension CSPhotoGalleryDetailViewController {
     @IBAction func backBtnAction(_ sender: Any) {
-        dismiss()
+        dismiss(animated: true)
     }
     
     @IBAction func checkBtnAction(_ sender: Any) {
@@ -98,7 +98,7 @@ private extension CSPhotoGalleryDetailViewController {
     
     @IBAction func okBtnAction(_ sender: Any) {
         delegate?.getAssets(assets: PhotoManager.sharedInstance.assets)
-        dismiss()
+        dismiss(animated: false)
     }
 }
 
@@ -165,7 +165,7 @@ fileprivate extension CSPhotoGalleryDetailViewController {
 
 //  MARK:- Extension
 fileprivate extension CSPhotoGalleryDetailViewController {
-    func dismiss() {
+    func dismiss(animated: Bool) {
         let parentVC = presentingViewController as? CSPhotoGalleryViewController
         parentVC?.scrollRectToVisible(indexPath: currentIndexPath)
         
@@ -174,7 +174,12 @@ fileprivate extension CSPhotoGalleryDetailViewController {
         
         PhotoManager.sharedInstance.assetToImage(asset: asset, imageSize: size, isCliping: false) { image in
             self.currentImage = image
-            self.dismiss(animated: true, completion: nil)
+            self.dismiss(animated: animated, completion: {
+                if !animated {
+                    parentVC?.delegate?.getAssets(assets: PhotoManager.sharedInstance.assets)
+                    parentVC?.delegate?.dismiss()
+                }
+            })
         }
     }
 }
