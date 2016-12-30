@@ -5,6 +5,10 @@
 [![License](https://img.shields.io/cocoapods/l/CSPhotoGallery.svg?style=flat)](http://cocoapods.org/pods/CSPhotoGallery)
 [![Platform](https://img.shields.io/cocoapods/p/CSPhotoGallery.svg?style=flat)](http://cocoapods.org/pods/CSPhotoGallery)
 
+![Sample Project](Example/CSPhotoGallery.gif)
+
+Supports iOS 9.0+, Swift 3.0
+
 ## Example
 
 To run the example project, clone the repo, and run `pod install` from the Example directory first.
