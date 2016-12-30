@@ -1,5 +1,7 @@
 # CSPhotoGallery
 
+- This is very simple and light photo browser written swift. and also you can show images or videos.
+
 [![CI Status](http://img.shields.io/travis/chansim.youk/CSPhotoGallery.svg?style=flat)](https://travis-ci.org/chansim.youk/CSPhotoGallery)
 [![Version](https://img.shields.io/cocoapods/v/CSPhotoGallery.svg?style=flat)](http://cocoapods.org/pods/CSPhotoGallery)
 [![License](https://img.shields.io/cocoapods/l/CSPhotoGallery.svg?style=flat)](http://cocoapods.org/pods/CSPhotoGallery)
