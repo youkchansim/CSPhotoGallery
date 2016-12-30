@@ -65,8 +65,8 @@ class CSPhotoGalleryDetailViewController: UIViewController {
     }
     
     var currentImage: UIImage?
-    var checkImage: UIImage? = CSPhotoDesignManager.instance.photoDetailCheckImage ?? UIImage(named: "check_select")
-    var unCheckImage: UIImage? = CSPhotoDesignManager.instance.photoDetailUnCheckImage ?? UIImage(named: "check_default")
+    var checkImage: UIImage?
+    var unCheckImage: UIImage?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -115,6 +115,16 @@ fileprivate extension CSPhotoGalleryDetailViewController {
     
     private func setView() {
         scrollToCurrentIndexPath()
+        
+        let podBundle = Bundle(for: CSPhotoGalleryDetailViewController.self)
+        let bundleURL = podBundle.url(forResource: "CSPhotoGallery", withExtension: "bundle")
+        let bundle = bundleURL == nil ? podBundle : Bundle(url: bundleURL!)
+        
+        let originalCheckImage = UIImage(named: "check_select", in: bundle, compatibleWith: nil)
+        let originalUnCheckImage = UIImage(named: "check_default", in: bundle, compatibleWith: nil)
+        
+        checkImage = CSPhotoDesignManager.instance.photoDetailCheckImage ?? originalCheckImage
+        unCheckImage = CSPhotoDesignManager.instance.photoDetailUnCheckImage ?? originalUnCheckImage
     }
     
     func updateCurrentSelectedCount() {

@@ -177,6 +177,16 @@ fileprivate extension CSPhotoGalleryViewController {
         addAssetCollectionView()
         addObserver()
         setTitle()
+        
+        let podBundle = Bundle(for: CSPhotoGalleryViewController.self)
+        let bundleURL = podBundle.url(forResource: "CSPhotoGallery", withExtension: "bundle")
+        let bundle = bundleURL == nil ? podBundle : Bundle(url: bundleURL!)
+        
+        let originalCheckImage = UIImage(named: "check_select", in: bundle, compatibleWith: nil)
+        let originalUnCheckImage = UIImage(named: "check_default", in: bundle, compatibleWith: nil)
+        
+        checkImage = CSPhotoDesignManager.instance.photoGalleryCheckImage ?? originalCheckImage
+        unCheckImage = CSPhotoDesignManager.instance.photoGalleryUnCheckImage ?? originalUnCheckImage
     }
     
     func addAssetCollectionView() {

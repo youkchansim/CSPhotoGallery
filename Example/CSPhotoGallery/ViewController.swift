@@ -15,8 +15,18 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        let designManager = CSPhotoDesignManager.instance
+        
+        //  Main
+        designManager.photoGalleryOKButtonTitle = "OK"
+        
+        //  Detail
+        designManager.photoDetailOKButtonTitle = "OK"
+        
         let vc = CSPhotoGalleryViewController.instance
         vc.delegate = self
+        vc.CHECK_MAX_COUNT = 10
+        vc.horizontalCount = 4
         present(vc, animated: true)
     }
 
