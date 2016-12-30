@@ -20,6 +20,36 @@ it, simply add the following line to your Podfile:
 pod "CSPhotoGallery"
 ```
 
+## Usage
+
+First Step  - `@import CSPhotoGallery` to your project 
+
+Second Step - Add a delegate `CGPhotoGalleryDelegate` to your class & add two delegate methods 
+
+Third Step - Present a CSPhotoGalleryViewController
+
+```Swift
+let vc = CSPhotoGalleryViewController.instance
+vc.delegate = self
+vc.CHECK_MAX_COUNT = 20
+vc.horizontalCount = 3
+vc.mediaType = .image
+present(vc, animated: true)
+```
+And you can customize ui design
+```Swift
+let designManager = CSPhotoDesignManager.instance
+designManager.photoDetailBackButtonImage
+designManager.photoDetailOKButtonTitle
+designManager.photoDetailCheckImage
+designManager.photoDetailUnCheckImage
+                
+designManager.photoGalleryBackButtonImage
+designManager.photoGalleryOKButtonTitle
+designManager.photoGalleryCheckImage
+designManager.photoGalleryUnCheckImage
+```
+
 ## Author
 
 chansim.youk, chansim.youk@navercorp.com
