@@ -31,7 +31,19 @@ pod "CSPhotoGallery"
 First Step  - `@import CSPhotoGallery` to your project 
 
 Second Step - Add a delegate `CGPhotoGalleryDelegate` to your class & add two delegate methods 
+```Swift
+func getAssets(assets: [PHAsset]) {
+  // if you implement this delegate function, you will receive assets
+}
 
+func dismiss() {
+  //  Photo browser dismiss
+  // ex)
+  //  dismiss(animated: true) {
+  //   do something
+  //  }
+}
+```
 Third Step - Present a CSPhotoGalleryViewController
 
 ```Swift
@@ -58,7 +70,7 @@ designManager.photoGalleryUnCheckImage
 
 ## Author
 
-chansim.youk, chansim.youk@navercorp.com
+chansim.youk, dbrckstla@naver.com
 
 ## License
 
