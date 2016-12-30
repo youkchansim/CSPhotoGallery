@@ -1,0 +1,16 @@
+PODS:
+  - CSPhotoGallery (0.1.0)
+
+DEPENDENCIES:
+  - CSPhotoGallery (from `../`)
+
+EXTERNAL SOURCES:
+  CSPhotoGallery:
+    :path: ../
+
+SPEC CHECKSUMS:
+  CSPhotoGallery: 12c75ae554d979c6081b1c194563a13d6143bb85
+
+PODFILE CHECKSUM: 866b6be9e6df9c3c4a9dbcb7248d1f81e92e130f
+
+COCOAPODS: 1.1.1

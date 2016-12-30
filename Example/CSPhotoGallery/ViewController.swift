@@ -1,0 +1,38 @@
+//
+//  ViewController.swift
+//  CSPhotoGallery
+//
+//  Created by chansim.youk on 12/30/2016.
+//  Copyright (c) 2016 chansim.youk. All rights reserved.
+//
+
+import UIKit
+import CSPhotoGallery
+import Photos
+
+class ViewController: UIViewController {
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        // Do any additional setup after loading the view, typically from a nib.
+        let vc = CSPhotoGalleryViewController.instance
+        vc.delegate = self
+        present(vc, animated: true)
+    }
+
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+
+}
+
+extension ViewController: CSPhotoGalleryDelegate {
+    func getAssets(assets: [PHAsset]) {
+        print(assets.count)
+    }
+    
+    func dismiss() {
+        dismiss(animated: true, completion: nil)
+    }
+}
