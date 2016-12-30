@@ -51,7 +51,7 @@ let vc = CSPhotoGalleryViewController.instance
 vc.delegate = self
 vc.CHECK_MAX_COUNT = 20
 vc.horizontalCount = 3
-vc.mediaType = .image
+vc.mediaType = .image //  or .video
 present(vc, animated: true)
 ```
 And you can customize ui design
