@@ -58,8 +58,8 @@ public class CSPhotoGalleryViewController: UIViewController {
     fileprivate var CSCollectionObservationContext = CSObservation()
     fileprivate var transitionDelegate: CSPhotoViewerTransition = CSPhotoViewerTransition()
     
-    var checkImage: UIImage? = CSPhotoDesignManager.instance.photoGalleryCheckImage ?? UIImage(named: "check_select")
-    var unCheckImage: UIImage? = CSPhotoDesignManager.instance.photoGalleryUnCheckImage ?? UIImage(named: "check_default")
+    var checkImage: UIImage?
+    var unCheckImage: UIImage?
     
     override public func viewDidLoad() {
         super.viewDidLoad()
