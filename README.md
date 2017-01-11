@@ -3,7 +3,7 @@
 [![Version](https://img.shields.io/cocoapods/v/CSPhotoGallery.svg?style=flat)](http://cocoapods.org/pods/CSPhotoGallery)
 [![License](https://img.shields.io/cocoapods/l/CSPhotoGallery.svg?style=flat)](http://cocoapods.org/pods/CSPhotoGallery)
 [![Platform](https://img.shields.io/cocoapods/p/CSPhotoGallery.svg?style=flat)](http://cocoapods.org/pods/CSPhotoGallery)
-![iOS 9.0+](https://img.shields.io/badge/iOS-8.0%2B-blue.svg)
+![iOS 9.0+](https://img.shields.io/badge/iOS-9.0%2B-blue.svg)
 ![Swift 3.0+](https://img.shields.io/badge/Swift-3.0%2B-orange.svg)
 
 - This is very simple and light photo browser written swift. and also you can show images or videos.
