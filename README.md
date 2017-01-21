@@ -8,7 +8,8 @@
 
 - This is very simple and light photo browser written swift. and also you can show images or videos.
 
-![Sample Project](Example/CSPhotoGallery.gif)
+![Sample Project](Example/csphotogallery.gif)
+![Sample Project](Example/csphotogallery2.gif)
 
 ## Example
 
