@@ -32,16 +32,24 @@ class CSPhotoGalleryDetailViewController: UIViewController {
     @IBOutlet fileprivate weak var checkCountLabel: UILabel? {
         didSet {
             updateCurrentSelectedCount()
+            checkCountLabel?.isHidden = CSPhotoDesignManager.instance.isOKButtonHidden
         }
     }
     
     @IBOutlet weak var collectionView: UICollectionView!
-    @IBOutlet fileprivate weak var checkBtn: UIButton!
+    @IBOutlet fileprivate weak var checkBtn: UIButton! {
+        didSet {
+            checkBtn.isHidden = CSPhotoDesignManager.instance.isOKButtonHidden
+        }
+    }
+    
     @IBOutlet weak var okBtn: UIButton! {
         didSet {
-            if let title = CSPhotoDesignManager.instance.photoDetailOKButtonTitle {
+            if let title = CSPhotoDesignManager.instance.photoGalleryOKButtonTitle {
                 okBtn.setTitle(title, for: .normal)
             }
+            
+            okBtn.isHidden = CSPhotoDesignManager.instance.isOKButtonHidden
         }
     }
     
@@ -123,8 +131,8 @@ fileprivate extension CSPhotoGalleryDetailViewController {
         let originalCheckImage = UIImage(named: "check_select", in: bundle, compatibleWith: nil)
         let originalUnCheckImage = UIImage(named: "check_default", in: bundle, compatibleWith: nil)
         
-        checkImage = CSPhotoDesignManager.instance.photoDetailCheckImage ?? originalCheckImage
-        unCheckImage = CSPhotoDesignManager.instance.photoDetailUnCheckImage ?? originalUnCheckImage
+        checkImage = CSPhotoDesignManager.instance.photoGalleryCheckImage ?? originalCheckImage
+        unCheckImage = CSPhotoDesignManager.instance.photoGalleryUnCheckImage ?? originalUnCheckImage
     }
     
     func updateCurrentSelectedCount() {

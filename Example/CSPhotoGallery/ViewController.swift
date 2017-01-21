@@ -19,9 +19,7 @@ class ViewController: UIViewController {
         
         //  Main
         designManager.photoGalleryOKButtonTitle = "OK"
-        
-        //  Detail
-        designManager.photoDetailOKButtonTitle = "OK"
+//        designManager.isOKButtonHidden = true
         
         let vc = CSPhotoGalleryViewController.instance
         vc.delegate = self

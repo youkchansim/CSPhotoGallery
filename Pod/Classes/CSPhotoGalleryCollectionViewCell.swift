@@ -11,7 +11,7 @@ import UIKit
 class CSPhotoGalleryCollectionViewCell: UICollectionViewCell {
     
     @IBOutlet weak var imageView: UIImageView!
-    @IBOutlet fileprivate weak var checkBtn: UIButton!
+    @IBOutlet weak var checkBtn: UIButton!
     @IBOutlet fileprivate weak var timeLabel: UILabel?
     
     var indexPath: IndexPath?

@@ -28,12 +28,19 @@ public class CSPhotoGalleryViewController: UIViewController {
         }
     }
     @IBOutlet fileprivate weak var collectionNameArrow: UILabel!
-    @IBOutlet fileprivate weak var checkCount: UILabel!
-    @IBOutlet fileprivate weak var checkBtn: UIButton! {
+    @IBOutlet fileprivate weak var checkCount: UILabel! {
+        didSet {
+            checkCount.isHidden = CSPhotoDesignManager.instance.isOKButtonHidden
+        }
+    }
+    
+    @IBOutlet fileprivate weak var okBtn: UIButton! {
         didSet {
             if let title = CSPhotoDesignManager.instance.photoGalleryOKButtonTitle {
-                checkBtn.setTitle(title, for: .normal)
+                okBtn.setTitle(title, for: .normal)
             }
+            
+            okBtn.isHidden = CSPhotoDesignManager.instance.isOKButtonHidden
         }
     }
     
@@ -257,6 +264,7 @@ extension CSPhotoGalleryViewController: UICollectionViewDataSource {
         cell?.representedAssetIdentifier = asset.localIdentifier
         cell?.checkImage = checkImage
         cell?.unCheckImage = unCheckImage
+        cell?.checkBtn.isHidden = CSPhotoDesignManager.instance.isOKButtonHidden
         
         cell?.setPlaceHolderImage(image: nil)
         

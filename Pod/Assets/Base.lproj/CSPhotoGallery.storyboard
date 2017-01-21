@@ -4,6 +4,7 @@
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
+        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -141,7 +142,7 @@
                                         </connections>
                                     </collectionViewCell>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" restorationIdentifier="CSPhotoGalleryVideoCollectionViewCell" reuseIdentifier="CSPhotoGalleryVideoCollectionViewCell" id="oTT-fW-taq" customClass="CSPhotoGalleryCollectionViewCell" customModule="CSPhotoGallery">
-                                        <rect key="frame" x="135" y="0.0" width="106" height="100"/>
+                                        <rect key="frame" x="134.5" y="0.0" width="106" height="100"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                             <rect key="frame" x="0.0" y="0.0" width="106" height="100"/>
@@ -218,11 +219,11 @@
                     <navigationItem key="navigationItem" id="rWf-wM-eIZ"/>
                     <connections>
                         <outlet property="backBtn" destination="JU9-jg-DbI" id="cxE-WL-PlC"/>
-                        <outlet property="checkBtn" destination="IJe-xQ-ESv" id="WWC-l1-1UY"/>
                         <outlet property="checkCount" destination="xtq-En-WSh" id="5uH-lM-kVk"/>
                         <outlet property="collectionName" destination="TVF-0b-dIe" id="0KO-KT-OcF"/>
                         <outlet property="collectionNameArrow" destination="mKw-Fu-VIK" id="q3Q-Df-a1u"/>
                         <outlet property="collectionView" destination="Aj0-cd-hX8" id="263-w8-TVE"/>
+                        <outlet property="okBtn" destination="IJe-xQ-ESv" id="kUB-5w-HoC"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -419,7 +420,7 @@
                                         <rect key="frame" x="0.0" y="28" width="375" height="80"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="uYe-Fl-CdN" id="Fp6-oY-apU">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="79"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="80"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="l52-ui-Sai">

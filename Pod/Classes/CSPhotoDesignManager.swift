@@ -15,18 +15,18 @@ public class CSPhotoDesignManager {
     //  Photo collection view
     public var photoGalleryBackButtonImage: UIImage?
     
-    public var photoGalleryOKButtonTitle: String?
-    
-    public var photoGalleryCheckImage: UIImage?
-    
-    public var photoGalleryUnCheckImage: UIImage?
-    
     //  Photo detail view
     public var photoDetailBackButtonImage: UIImage?
     
-    public var photoDetailOKButtonTitle: String?
+    //  OK Button Title
+    public var photoGalleryOKButtonTitle: String?
     
-    public var photoDetailCheckImage: UIImage?
+    //  Check Image
+    public var photoGalleryCheckImage: UIImage?
     
-    public var photoDetailUnCheckImage: UIImage?
+    //  UnCheck Image
+    public var photoGalleryUnCheckImage: UIImage?
+    
+    //  When OK Button is hidden, CheckCountLabel and CheckBtn is hidden  
+    public var isOKButtonHidden = false
 }
