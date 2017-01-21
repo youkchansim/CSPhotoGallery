@@ -27,7 +27,8 @@ class ViewController: UIViewController {
         vc.delegate = self
         vc.CHECK_MAX_COUNT = 10
         vc.horizontalCount = 4
-        present(vc, animated: true)
+//        present(vc, animated: true)
+        navigationController?.pushViewController(vc, animated: true)
     }
 
     override func didReceiveMemoryWarning() {

@@ -37,9 +37,10 @@ class CSPhotoViewerPresentAnimation: NSObject, UIViewControllerAnimatedTransitio
     }
     
     func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
-        let toViewController = transitionContext.viewController(forKey: UITransitionContextViewControllerKey.to)! as! CSPhotoGalleryDetailViewController
+        guard let toViewController = transitionContext.viewController(forKey: .to) as? CSPhotoGalleryDetailViewController else { return }
+        
         let containerView = transitionContext.containerView
-        let animationDuration = self .transitionDuration(using: transitionContext)
+        let animationDuration = transitionDuration(using: transitionContext)
         
         let imageView = UIImageView(image: originalImage)
         imageView.contentMode = .scaleAspectFill
@@ -48,7 +49,6 @@ class CSPhotoViewerPresentAnimation: NSObject, UIViewControllerAnimatedTransitio
         containerView.addSubview(imageView)
         
         toViewController.view.alpha = 0
-        containerView.frame = toViewController.view.frame
         containerView.addSubview(toViewController.view)
         
         let frame = getImageScaleFactor(originImage: originalImage, standardFrame: toViewController.collectionView.frame)
@@ -71,14 +71,21 @@ class CSPhotoViewerDismissAnimation: NSObject, UIViewControllerAnimatedTransitio
     }
     
     func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
-        let animationDuration = self .transitionDuration(using: transitionContext)
+        var toViewController: CSPhotoGalleryViewController?
+        
+        if let vc = transitionContext.viewController(forKey: .to) as? CSPhotoGalleryViewController {
+            toViewController = vc
+        } else if let nvc = transitionContext.viewController(forKey: .to) as? UINavigationController {
+            guard let vc = nvc.topViewController as? CSPhotoGalleryViewController else { return }
+            toViewController = vc
+        }
+        
+        guard let fromViewController = transitionContext.viewController(forKey: .from) as? CSPhotoGalleryDetailViewController else { return }
+        
+        let animationDuration = transitionDuration(using: transitionContext)
         let containerView = transitionContext.containerView
-        
-        let toViewController = transitionContext.viewController(forKey: UITransitionContextViewControllerKey.to)! as! CSPhotoGalleryViewController
-        let fromViewController = transitionContext.viewController(forKey: UITransitionContextViewControllerKey.from)! as! CSPhotoGalleryDetailViewController
-        
         let originImage = fromViewController.currentImage ?? UIImage()
-        let destinationFrame = toViewController.collectionViewCellFrame(at: fromViewController.currentIndexPath)
+        let destinationFrame = toViewController?.collectionViewCellFrame(at: fromViewController.currentIndexPath) ?? CGRect.zero
         
         let frame = getImageScaleFactor(originImage: originImage, standardFrame: fromViewController.collectionView.frame)
         let imageView = UIImageView(frame: frame)
