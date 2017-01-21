@@ -55,16 +55,27 @@ present(vc, animated: true)
 ```
 And you can customize ui design
 ```Swift
-let designManager = CSPhotoDesignManager.instance
-designManager.photoDetailBackButtonImage
-designManager.photoDetailOKButtonTitle
-designManager.photoDetailCheckImage
-designManager.photoDetailUnCheckImage
-                
-designManager.photoGalleryBackButtonImage
-designManager.photoGalleryOKButtonTitle
-designManager.photoGalleryCheckImage
-designManager.photoGalleryUnCheckImage
+public class CSPhotoDesignManager {
+    public static var instance: CSPhotoDesignManager = CSPhotoDesignManager()
+    
+    //  Photo collection view
+    public var photoGalleryBackButtonImage: UIImage?
+    
+    //  Photo detail view
+    public var photoDetailBackButtonImage: UIImage?
+    
+    //  OK Button Title
+    public var photoGalleryOKButtonTitle: String?
+    
+    //  Check Image
+    public var photoGalleryCheckImage: UIImage?
+    
+    //  UnCheck Image
+    public var photoGalleryUnCheckImage: UIImage?
+    
+    //  When OK Button is hidden, CheckCountLabel and CheckBtn is hidden  
+    public var isOKButtonHidden = false
+}
 ```
 
 ## Author
