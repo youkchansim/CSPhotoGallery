@@ -174,8 +174,17 @@ fileprivate extension CSPhotoGalleryDetailViewController {
 //  MARK:- Extension
 fileprivate extension CSPhotoGalleryDetailViewController {
     func dismiss(animated: Bool) {
-        let parentVC = presentingViewController as? CSPhotoGalleryViewController
-        parentVC?.scrollRectToVisible(indexPath: currentIndexPath)
+        var vc: CSPhotoGalleryViewController?
+        
+        if presentingViewController is CSPhotoGalleryViewController {
+            vc = presentingViewController as? CSPhotoGalleryViewController
+        } else if presentingViewController is UINavigationController {
+            let nvc = presentingViewController as? UINavigationController
+            vc = nvc?.topViewController as? CSPhotoGalleryViewController
+        }
+        
+        vc?.scrollRectToVisible(indexPath: currentIndexPath)
+        vc?.reloadCollectionView()
         
         let asset = PhotoManager.sharedInstance.getCurrentCollectionAsset(at: currentIndexPath)
         let size = CGSize(width: asset.pixelWidth, height: asset.pixelHeight)
@@ -184,8 +193,8 @@ fileprivate extension CSPhotoGalleryDetailViewController {
             self.currentImage = image
             self.dismiss(animated: animated, completion: {
                 if !animated {
-                    parentVC?.delegate?.getAssets(assets: PhotoManager.sharedInstance.assets)
-                    parentVC?.delegate?.dismiss()
+                    vc?.delegate?.getAssets(assets: PhotoManager.sharedInstance.assets)
+                    vc?.delegate?.dismiss()
                 }
             })
         }

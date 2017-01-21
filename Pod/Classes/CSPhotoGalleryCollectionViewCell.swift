@@ -28,12 +28,10 @@ class CSPhotoGalleryCollectionViewCell: UICollectionViewCell {
 //  MARK:- Extension
 extension CSPhotoGalleryCollectionViewCell {
     func setButtonImage() {
-        DispatchQueue.main.async {
-            if PhotoManager.sharedInstance.isSelectedIndexPath(identifier: self.representedAssetIdentifier!) {
-                self.checkBtn.setImage(self.checkImage, for: .normal)
-            } else {
-                self.checkBtn.setImage(self.unCheckImage, for: .normal)
-            }
+        if PhotoManager.sharedInstance.isSelectedIndexPath(identifier: representedAssetIdentifier ?? "") {
+            checkBtn.setImage(checkImage, for: .normal)
+        } else {
+            checkBtn.setImage(unCheckImage, for: .normal)
         }
     }
     

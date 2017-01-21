@@ -90,9 +90,9 @@ public class CSPhotoGalleryViewController: UIViewController {
     }
     
     deinit {
-        PhotoManager.sharedInstance.remover(object: self)
         PhotoManager.sharedInstance.removeObserver(self, forKeyPath: "selectedItemCount")
         PhotoManager.sharedInstance.removeObserver(self, forKeyPath: "currentCollection")
+        PhotoManager.sharedInstance.remover(object: self)
     }
 }
 
@@ -264,6 +264,8 @@ extension CSPhotoGalleryViewController: UICollectionViewDataSource {
         cell?.representedAssetIdentifier = asset.localIdentifier
         cell?.checkImage = checkImage
         cell?.unCheckImage = unCheckImage
+        cell?.setButtonImage()
+        
         cell?.checkBtn.isHidden = CSPhotoDesignManager.instance.isOKButtonHidden
         
         cell?.setPlaceHolderImage(image: nil)
