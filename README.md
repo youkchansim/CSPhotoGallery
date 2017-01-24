@@ -36,12 +36,10 @@ func getAssets(assets: [PHAsset]) {
   // if you implement this delegate function, you will receive assets
   Example )
   assets.forEach { asset in
-    assets.forEach {
-        let size = CGSize(width: asset.pixelWidth, height: asset.pixelHeight)
-        PhotoManager.sharedInstance.assetToImage(asset: asset, imageSize: size, completionHandler: { image in
-              // Do something
-        })
-    }
+    let size = CGSize(width: asset.pixelWidth, height: asset.pixelHeight)
+    PhotoManager.sharedInstance.assetToImage(asset: asset, imageSize: size, completionHandler: { image in
+          // Do something
+    })
   }
 }
 ```
