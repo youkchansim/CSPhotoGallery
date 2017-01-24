@@ -28,20 +28,21 @@ pod "CSPhotoGallery"
 
 ## Usage
 
-First Step  - `@import CSPhotoGallery` to your project 
+First Step  - `import CSPhotoGallery` to your project 
 
 Second Step - Add a delegate `CGPhotoGalleryDelegate` to your class & add two delegate methods 
 ```Swift
 func getAssets(assets: [PHAsset]) {
   // if you implement this delegate function, you will receive assets
-}
-
-func dismiss() {
-  //  Photo browser dismiss
-  // ex)
-  //  dismiss(animated: true) {
-  //   do something
-  //  }
+  Example )
+  assets.forEach { asset in
+    assets.forEach {
+        let size = CGSize(width: asset.pixelWidth, height: asset.pixelHeight)
+        PhotoManager.sharedInstance.assetToImage(asset: asset, imageSize: size, completionHandler: { image in
+              // Do something
+        })
+    }
+  }
 }
 ```
 Third Step - Present a CSPhotoGalleryViewController
