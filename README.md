@@ -30,7 +30,7 @@ pod "CSPhotoGallery"
 
 First Step  - `import CSPhotoGallery` to your project 
 
-Second Step - Add a delegate `CGPhotoGalleryDelegate` to your class & add two delegate methods 
+Second Step - Add a delegate `CGPhotoGalleryDelegate` to your class & add a delegate methods 
 ```Swift
 func getAssets(assets: [PHAsset]) {
   // if you implement this delegate function, you will receive assets
