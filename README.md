@@ -34,7 +34,7 @@ Second Step - Add a delegate `CGPhotoGalleryDelegate` to your class & add a dele
 ```Swift
 func getAssets(assets: [PHAsset]) {
   // if you implement this delegate function, you will receive assets
-  Example )
+  // Example )
   assets.forEach { asset in
     let size = CGSize(width: asset.pixelWidth, height: asset.pixelHeight)
     PhotoManager.sharedInstance.assetToImage(asset: asset, imageSize: size, completionHandler: { image in
