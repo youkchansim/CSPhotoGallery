@@ -30,8 +30,8 @@ public enum CSPhotoImageType {
     }
 }
 
-class PhotoManager: NSObject {
-    static var sharedInstance: PhotoManager = PhotoManager()
+public class PhotoManager: NSObject {
+    public static var sharedInstance: PhotoManager = PhotoManager()
     
     fileprivate var smartAlbums: [PHAssetCollection] = []
     fileprivate var userCollections: [PHCollection] = []
@@ -144,18 +144,6 @@ extension PhotoManager {
         assetToImage(asset: asset, imageSize: thumbnailSize, isCliping: isCliping,completionHandler: completionHandler)
     }
     
-    func assetToImage(asset: PHAsset, imageSize: CGSize, isCliping: Bool, completionHandler: ((UIImage)->())?) {
-        imageManager.requestImage(for: asset, targetSize: imageSize, contentMode: .aspectFill, options: imageRequestOptions) { image, _ in
-            if let thumbnameImage = image {
-                if isCliping {
-                    completionHandler?(thumbnameImage.clipRect)
-                } else {
-                    completionHandler?(thumbnameImage)
-                }
-            }
-        }
-    }
-    
     //  Check selected IndexPath
     func isSelectedIndexPath(identifier: String) -> Bool {
         return selectedIdentifiers.index(of: identifier) != nil
@@ -175,6 +163,20 @@ extension PhotoManager {
     //  
     func performChanges(changeBlock: @escaping () -> (), completionHandler: ((Bool, Error?) -> ())?) {
         PHPhotoLibrary.shared().performChanges(changeBlock, completionHandler: completionHandler)
+    }
+}
+
+public extension PhotoManager {
+    func assetToImage(asset: PHAsset, imageSize: CGSize, isCliping: Bool = false, completionHandler: ((UIImage)->())?) {
+        imageManager.requestImage(for: asset, targetSize: imageSize, contentMode: .aspectFill, options: imageRequestOptions) { image, _ in
+            if let thumbnameImage = image {
+                if isCliping {
+                    completionHandler?(thumbnameImage.clipRect)
+                } else {
+                    completionHandler?(thumbnameImage)
+                }
+            }
+        }
     }
 }
 
