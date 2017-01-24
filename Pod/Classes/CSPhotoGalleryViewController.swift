@@ -151,12 +151,12 @@ extension CSPhotoGalleryViewController {
 //  MARK:- Actions
 private extension CSPhotoGalleryViewController {
     @IBAction func backBtnAction(_ sender: Any) {
-        delegate?.dismiss()
+        dismiss()
     }
     
     @IBAction func checkBtnAction(_ sender: Any) {
         delegate?.getAssets(assets: PhotoManager.sharedInstance.assets)
-        delegate?.dismiss()
+        dismiss()
     }
 }
 
@@ -235,6 +235,16 @@ fileprivate extension CSPhotoGalleryViewController {
             case .notDetermined:
                 self.checkPhotoLibraryPermission()
             }
+        }
+    }
+}
+
+extension CSPhotoGalleryViewController {
+    func dismiss() {
+        if let nvc = navigationController {
+            let _ = nvc.popViewController(animated: true)
+        } else {
+            dismiss(animated: true, completion: nil)
         }
     }
 }

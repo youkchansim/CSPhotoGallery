@@ -194,7 +194,7 @@ fileprivate extension CSPhotoGalleryDetailViewController {
             self.dismiss(animated: animated, completion: {
                 if !animated {
                     vc?.delegate?.getAssets(assets: PhotoManager.sharedInstance.assets)
-                    vc?.delegate?.dismiss()
+                    vc?.dismiss()
                 }
             })
         }

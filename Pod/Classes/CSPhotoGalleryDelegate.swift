@@ -10,5 +10,4 @@ import Photos
 
 public protocol CSPhotoGalleryDelegate {
     func getAssets(assets: [PHAsset])
-    func dismiss()
 }
