@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'CSPhotoGallery'
-  s.version          = '0.2.1'
+  s.version          = '0.3.0'
   s.summary          = 'A simple and elegant Photo gallery'
 
 # This description is used to generate tags and improve search results.
